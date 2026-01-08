@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation, Outlet } from 'react-router-dom';
 import { Menu, X, Shield, MapPin, Phone, Mail, FileText, ArrowUpRight, Award, Box, Sparkles, Orbit, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import StatusDashboard from './pages/admin/StatusDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import NovedadesManager from './pages/admin/NovedadesManager';
 import SettingsManager from './pages/admin/SettingsManager';
+import DivisionDetail from './pages/divisions/DivisionDetail';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import OriChatBot from './components/OriChatBot';
 import { WhatsAppButton } from './components/WhatsAppButton';
@@ -208,12 +209,14 @@ const LegalSection = () => (
   </section>
 );
 
-const DivisionCard = ({ icon, title, subtitle, desc, image }: { icon: any, title: string, subtitle: string, desc: string, image: string }) => {
+
+const DivisionCard = ({ id, icon, title, subtitle, desc, image, color }: { id: string, icon: any, title: string, subtitle: string, desc: string, image: string, color: string }) => {
   return (
-    <div className="group bg-slate-900 border border-white/5 rounded-[2rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 relative h-[500px] flex flex-col">
+    <Link to={`/division/${id}`} className="group bg-slate-900 border border-white/5 rounded-[2rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 relative h-[500px] flex flex-col">
       <div className="absolute inset-0 z-0">
         <img src={image} className="w-full h-full object-cover opacity-40 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" alt={title} />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/0 via-slate-950/80 to-slate-950"></div>
+        <div className={`absolute inset-0 bg-gradient-to-tr ${color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
       </div>
 
       <div className="relative z-10 p-8 h-full flex flex-col">
@@ -234,19 +237,19 @@ const DivisionCard = ({ icon, title, subtitle, desc, image }: { icon: any, title
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 };
 
 const DivisionExplorer = () => (
-  <section className="py-32 bg-void">
+  <section className="py-32 bg-void" id="servicios">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-20">
         <h2 className="text-sm font-black text-amber-500 uppercase tracking-[0.6em] mb-4">Los Elementos</h2>
         <h3 className="text-5xl md:text-7xl font-black text-white">Divisiones del <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-700">Hub</span></h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {DIVISIONS.map((div) => (
           <DivisionCard key={div.id} {...div} />
         ))}
@@ -362,6 +365,7 @@ const ContactView = () => {
               <div>
                 <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">División de Interés</label>
                 <select className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all appearance-none cursor-pointer">
+                  <option>Estrategia</option>
                   <option>Mobiliario</option>
                   <option>Construcción</option>
                   <option>Logística</option>
@@ -447,6 +451,18 @@ const PublicLayout = () => (
 );
 
 const App = () => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        sessionStorage.setItem('magic_access', 'true');
+        window.location.hash = '/admin';
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <ConfigProvider>
       <HashRouter>
@@ -465,6 +481,7 @@ const App = () => {
             <Route path="/servicios" element={<DivisionExplorer />} />
             <Route path="/contact" element={<ContactView />} />
             <Route path="/mobiliario" element={<MobiliarioSection />} />
+            <Route path="/division/:id" element={<DivisionDetail />} />
           </Route>
 
           {/* Auth Route */}

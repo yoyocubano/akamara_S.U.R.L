@@ -1,9 +1,9 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { X, Send, Sparkles } from "lucide-react";
+import { X, Send, Sparkles, Loader2 } from "lucide-react";
 
 interface Message {
-    role: "user" | "assistant";
+    role: "user" | "assistant" | "system";
     content: string;
     timestamp?: string;
 }
@@ -15,35 +15,33 @@ export default function OriChatBot() {
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || "sk-ee8de57e3144456aa0b13285ada8c0eb";
+
     // Dynamic Identity Logic
-    const YUNIOR_END_DATE = new Date("2026-01-16T23:59:59"); // 1 week from now (Jan 9)
-    const isYuniorMode = new Date() < YUNIOR_END_DATE;
+    const YUNIOR_END_DATE = new Date("2026-01-16T23:59:59");
+    const now = new Date();
+    const isYuniorMode = now < YUNIOR_END_DATE;
+
+    const getTimeGreeting = () => {
+        const hour = now.getHours();
+        if (hour >= 5 && hour < 12) return isYuniorMode ? "¡Buenos días, asere!" : "¡Buenos días!";
+        if (hour >= 12 && hour < 19) return isYuniorMode ? "¡Buenas tardes, qué volá!" : "¡Buenas tardes!";
+        return isYuniorMode ? "¡Buenas noches, en la talla!" : "¡Buenas noches!";
+    };
 
     const botIdentity = isYuniorMode ? {
         name: "Yunior GPT",
         slogan: "que bolero el mio",
-        vibe: "repartero",
-        greeting: "¡Oye qué volá! Soy Yunior, el que sabe de todo aquí en Akamara. Dime qué es lo que hay, ¿qué bolero el mío?",
-        responses: [
-            "Asere, déjame ver qué te invento con la tecnología esta...",
-            "¡Oye, eso está volao! En Akamara andamos en la talla, tú sabes.",
-            "Dame un chance que estoy tirándole un cabo a la neurona.",
-            "¿Tú quieres saber de muebles o de obra? Suelta por esa boca que aquí todo es fula.",
-            "¡Qué clase de muela! Pero dale, que yo te sigo el rastro."
-        ],
+        vibe: "repartero cubano",
+        greeting: `${getTimeGreeting()} Soy Yunior, el que sabe de todo aquí en Akamara. Dime qué es lo que hay, ¿qué bolero el mío?`,
+        systemPrompt: `Eres Yunior GPT, un asistente virtual cubano con estilo "repartero". Tu slogan es "que bolero el mio". Hablas con jerga cubana urbana de forma moderada pero auténtica (asere, qué volá, en la talla, fula, muela). Eres el asistente temporal de Akamara S.U.R.L., una empresa de multiservicios en Cuba (Mobiliario, Construcción, Logística). Eres experto en todo pero de forma relajada y directa. Estás activo por una semana antes de que regrese Ori IA.`,
         iconStyle: "bg-red-600 shadow-red-900/40"
     } : {
         name: "Ori IA",
         slogan: "Asistente Virtual Eficiente",
         vibe: "efficient",
-        greeting: "¡Hola! Soy Ori, la asistente virtual de Akamara. ¿En qué puedo ayudarle hoy de manera eficiente?",
-        responses: [
-            "Estoy procesando su solicitud con nuestros algoritmos de precisión...",
-            "Información analizada. En Akamara priorizamos la eficiencia y la calidad.",
-            "Permítame consultar nuestra base de datos para brindarle la mejor respuesta.",
-            "Entendido. ¿Desea detalles sobre nuestros servicios de Mobiliario o Construcción?",
-            "Optimización en curso. Seguimos a su disposición para cualquier duda técnica."
-        ],
+        greeting: `${getTimeGreeting()} Soy Ori, la asistente virtual de Akamara. ¿En qué puedo ayudarle hoy de manera eficiente?`,
+        systemPrompt: `Eres Ori IA, la asistente virtual oficial de Akamara S.U.R.L. Tu tono es profesional, eficiente, cortés y altamente analítico. Akamara es un ecosistema de multiservicios en Cuba (Mobiliario de diseño, Construcción integral, Logística y Gastronomía). Tu objetivo es brindar información precisa y ayudar a los clientes a canalizar sus proyectos.`,
         iconStyle: "bg-gradient-to-tr from-amber-500 to-amber-700"
     };
 
@@ -70,6 +68,40 @@ export default function OriChatBot() {
 
     const getCurrentTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+    const fetchDeepSeekResponse = async (chatMessages: Message[]) => {
+        const fullPrompt = [
+            {
+                role: "system",
+                content: `${botIdentity.systemPrompt}\n\nCONTEXTO ACTUAL:\n- Fecha: ${now.toLocaleDateString('es-ES')}\n- Hora Local: ${now.toLocaleTimeString('es-ES')}\n- Ubicación: La Habana, Cuba.\n\nIMPORTANTE: No alucines con la fecha ni la hora, usa los datos proporcionados arriba. Saluda adecuadamente según el contexto horario si es necesario.`
+            },
+            ...chatMessages.map(m => ({ role: m.role, content: m.content }))
+        ];
+
+        try {
+            const response = await fetch("https://api.deepseek.com/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "deepseek-chat",
+                    messages: fullPrompt,
+                    stream: false
+                })
+            });
+
+            if (!response.ok) throw new Error("Error en la API de DeepSeek");
+            const data = await response.json();
+            return data.choices[0].message.content;
+        } catch (error) {
+            console.error("DeepSeek Error:", error);
+            return isYuniorMode
+                ? "Asere, la tecnología me tiró un pie de amigo. Aguántame ahí un momento o escríbenos al WhatsApp."
+                : "Lo siento, estoy experimentando una interrupción técnica. Por favor, inténtelo de nuevo en unos momentos o contáctenos vía WhatsApp.";
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!inputValue.trim() || isLoading) return;
@@ -80,21 +112,19 @@ export default function OriChatBot() {
             timestamp: getCurrentTime(),
         };
 
-        setMessages((prev) => [...prev, userMsg]);
+        const updatedMessages = [...messages, userMsg];
+        setMessages(updatedMessages);
         setInputValue("");
         setIsLoading(true);
 
-        // Simulate Response
-        setTimeout(() => {
-            const randomResponse = botIdentity.responses[Math.floor(Math.random() * botIdentity.responses.length)];
+        const aiResponse = await fetchDeepSeekResponse(updatedMessages);
 
-            setMessages((prev) => [...prev, {
-                role: "assistant",
-                content: randomResponse,
-                timestamp: getCurrentTime()
-            }]);
-            setIsLoading(false);
-        }, 1500);
+        setMessages((prev) => [...prev, {
+            role: "assistant",
+            content: aiResponse,
+            timestamp: getCurrentTime()
+        }]);
+        setIsLoading(false);
     };
 
     return (
@@ -102,7 +132,7 @@ export default function OriChatBot() {
             {isOpen && (
                 <>
                     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]" onClick={() => setIsOpen(false)} />
-                    <div className="fixed z-[9999] bottom-4 right-4 sm:bottom-8 sm:right-8 w-full sm:w-[400px] flex flex-col shadow-2xl bg-slate-950 border border-amber-500/30 rounded-2xl overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-300">
+                    <div className="fixed z-[9999] bottom-4 right-4 sm:bottom-8 sm:right-8 w-full sm:w-[400px] h-[600px] flex flex-col shadow-2xl bg-slate-950 border border-amber-500/30 rounded-2xl overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-300">
 
                         {/* Header */}
                         <div className="p-4 flex justify-between items-center bg-slate-900/90 border-b border-white/5 backdrop-blur-md">
@@ -124,7 +154,7 @@ export default function OriChatBot() {
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 h-[400px] overflow-y-auto p-4 space-y-4 bg-slate-950 relative">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-950 relative">
                             {/* Background Pattern */}
                             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 50% 50%, #f59e0b 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
 
@@ -150,9 +180,8 @@ export default function OriChatBot() {
                             {isLoading && (
                                 <div className="flex justify-start">
                                     <div className="flex gap-2 items-center bg-slate-800 px-4 py-2 rounded-xl">
-                                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce"></div>
+                                        <Loader2 className="w-4 h-4 text-amber-500 animate-spin" />
+                                        <span className="text-[10px] text-slate-500 italic">Procesando...</span>
                                     </div>
                                 </div>
                             )}
@@ -184,7 +213,7 @@ export default function OriChatBot() {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full text-white shadow-2xl transition-all duration-300 flex items-center justify-center group transform-gpu hover:scale-110 ${isYuniorMode ? 'bg-red-600 shadow-red-500/30 hover:shadow-red-500/50' : 'bg-gradient-to-r from-amber-500 to-amber-600 shadow-amber-500/30 hover:shadow-amber-500/50'}`}
+                    className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full text-white shadow-2xl transition-all duration-300 flex items-center justify-center group transform-gpu hover:scale-110 bg-gradient-to-r from-amber-500 to-amber-600 shadow-amber-500/30 hover:shadow-amber-500/50"
                 >
                     <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">

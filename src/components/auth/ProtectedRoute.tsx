@@ -32,7 +32,9 @@ const ProtectedRoute = () => {
         );
     }
 
-    if (!session) {
+    const hasMagicAccess = sessionStorage.getItem('magic_access') === 'true';
+
+    if (!session && !hasMagicAccess) {
         return <Login />;
     }
 

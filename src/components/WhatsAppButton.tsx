@@ -1,6 +1,4 @@
 
-import React from "react";
-
 export function WhatsAppButton() {
     const defaultNumber = "5358746866";
     const waLink = `https://wa.me/${defaultNumber}`;
