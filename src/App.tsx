@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, Shield, MapPin, Phone, Mail, FileText, ArrowUpRight, Award, Box, Sparkles, Sun, Orbit, ArrowRight, Star, Armchair, Hammer, ChefHat, Truck } from 'lucide-react';
+import { Menu, X, Shield, MapPin, Phone, Mail, FileText, ArrowUpRight, Award, Box, Sparkles, Orbit, ArrowRight } from 'lucide-react';
 import { DIVISIONS, LEGAL_INFO } from './constants';
 
 const Navbar = () => {
@@ -186,7 +186,7 @@ const LegalSection = () => (
   </section>
 );
 
-const DivisionCard = ({ icon, title, subtitle, desc, image }) => {
+const DivisionCard = ({ icon, title, subtitle, desc, image }: { icon: any, title: string, subtitle: string, desc: string, image: string }) => {
   // Map emoji icons/strings to Lucide components if needed, or use as is
   const IconWrapper = () => {
     if (title.includes("Mobiliario")) return <Armchair className="w-8 h-8" />;

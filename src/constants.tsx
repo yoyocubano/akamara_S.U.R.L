@@ -1,4 +1,4 @@
-import { Box, Home, Zap, Briefcase, Globe, Anchor } from 'lucide-react';
+import { Armchair, Hammer, ChefHat, Truck } from 'lucide-react';
 
 export const COLORS = {
     amber: {
@@ -14,62 +14,48 @@ export const COLORS = {
 };
 
 export const LEGAL_INFO = {
-    nit: '900000000-1'
+    name: "Akamara S.U.R.L.",
+    nit: "50004324225",
+    founded: "Octubre 2024",
+    location: "La Habana, Cuba",
+    gaceta: "GOC-2024-EX88",
+    contact: {
+        phone: "+53 5 123 4567",
+        email: "direccion@akamara.cu"
+    }
 };
 
 export const DIVISIONS = [
     {
-        id: 1,
-        title: 'DUJO Mobiliario',
+        id: 'dujo',
+        title: 'Mobiliario DUJO',
         subtitle: 'La Forma',
-        desc: 'Diseño y manufactura de mobiliario con identidad cubana y estándares globales.',
-        icon: <Home size={32} />,
-        image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800',
-        path: '/dujo'
+        desc: 'Diseño y fabricación de mobiliario de alto estándar para hotelería y residencias de lujo. Maderas preciosas y acabados de metal.',
+        icon: <Armchair size={32} />,
+        image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1000'
     },
     {
-        id: 2,
-        title: 'Energía Vital',
-        subtitle: 'El Impulso',
-        desc: 'Soluciones de energía renovable y sistemas eléctricos de alta eficiencia.',
-        icon: <Zap size={32} />,
-        image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=800',
-        path: '/energia'
+        id: 'construccion',
+        title: 'Construcción',
+        subtitle: 'Infraestructura',
+        desc: 'Ejecución de obra civil y terminaciones con brigadas especializadas. Solidez estructural y estética refinada.',
+        icon: <Hammer size={32} />,
+        image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=1000'
     },
     {
-        id: 3,
-        title: 'Infraestructura',
-        subtitle: 'La Base',
-        desc: 'Construcción y mantenimiento de espacios comerciales y residenciales.',
-        icon: <Briefcase size={32} />,
-        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
-        path: '/infra'
+        id: 'gastronomia',
+        title: 'Gastronomía',
+        subtitle: 'Catering & Eventos',
+        desc: 'Servicios de alimentación institucional y eventos corporativos con los más altos estándares sanitarios.',
+        icon: <ChefHat size={32} />,
+        image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=1000'
     },
     {
-        id: 4,
-        title: 'Logística Global',
-        subtitle: 'El Flujo',
-        desc: 'Importación y distribución de materias primas y equipamiento.',
-        icon: <Globe size={32} />,
-        image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800',
-        path: '/logistica'
-    },
-    {
-        id: 5,
-        title: 'Consultoría',
-        subtitle: 'La Mente',
-        desc: 'Asesoría estratégica para el desarrollo de negocios en la región.',
-        icon: <Anchor size={32} />,
-        image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800',
-        path: '/consultoria'
-    },
-    {
-        id: 6,
-        title: 'Pack & Move',
-        subtitle: 'El Movimiento',
-        desc: 'Soluciones de empaque y traslado para empresas y particulares.',
-        icon: <Box size={32} />,
-        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
-        path: '/pack'
+        id: 'transporte',
+        title: 'Logística',
+        subtitle: 'Transporte',
+        desc: 'Flota especializada para movimiento de carga y logística de distribución en todo el territorio nacional.',
+        icon: <Truck size={32} />,
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000'
     }
 ];
