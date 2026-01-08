@@ -12,7 +12,7 @@ const StatusDashboard = () => {
     }, []);
 
     const checkHealth = async () => {
-        const { data, error } = await supabase.from('novedades').select('count', { count: 'exact', head: true });
+        const { error } = await supabase.from('novedades').select('count', { count: 'exact', head: true });
         if (error && error.code !== 'PGRST116') { // Ignore empty result error if strictly checking connection
             setDbStatus('error');
         } else {

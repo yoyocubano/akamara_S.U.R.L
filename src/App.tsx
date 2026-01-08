@@ -337,7 +337,7 @@ const ContactView = () => (
             <div>
               <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">División de Interés</label>
               <select className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all appearance-none cursor-pointer">
-                <option>Mobiliario (DUJO)</option>
+                <option>Mobiliario</option>
                 <option>Construcción</option>
                 <option>Logística</option>
                 <option>Gastronomía</option>
@@ -405,6 +405,7 @@ const Footer = () => (
 import Login from './pages/Login';
 import AdminLayout from './layouts/AdminLayout';
 import StatusDashboard from './pages/admin/StatusDashboard';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import './i18n'; // Init i18n
 
