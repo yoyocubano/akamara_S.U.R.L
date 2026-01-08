@@ -8,19 +8,19 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/40 backdrop-blur-xl border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/40 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-amber-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center shadow-2xl transition-transform group-hover:scale-110">
+                <div className="absolute inset-0 bg-amber-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
                   <span className="text-white font-black text-2xl">A</span>
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tighter text-white uppercase group-hover:text-amber-500 transition-colors">Akamara</span>
+                <span className="text-xl font-black tracking-tighter text-white uppercase group-hover:text-amber-500 transition-colors duration-300">Akamara</span>
                 <span className="text-[9px] uppercase tracking-[0.4em] text-slate-400 font-bold">Inicio de la creación</span>
               </div>
             </Link>
@@ -36,11 +36,12 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-[10px] uppercase tracking-[0.25em] font-black transition-all relative group ${location.pathname === link.path ? 'text-amber-500' : 'text-slate-400 hover:text-white'
+                className={`text-[10px] uppercase tracking-[0.25em] font-black transition-all duration-300 relative group overflow-hidden ${location.pathname === link.path ? 'text-amber-500' : 'text-slate-400 hover:text-white'
                   }`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 h-[2px] bg-amber-500 transition-all duration-300 ${location.pathname === link.path ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                {/* Performance Optimization: Scale X instead of Width Animation */}
+                <span className={`absolute -bottom-1 left-0 h-[2px] bg-amber-500 transition-transform duration-300 origin-left ${location.pathname === link.path ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
               </Link>
             ))}
           </div>
@@ -58,10 +59,10 @@ const Navbar = () => {
 
 const Hero = () => (
   <section className="relative h-screen flex items-center justify-center overflow-hidden bg-void">
-    {/* Primal Energy Background */}
-    <div className="absolute inset-0 z-0">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-600/10 rounded-full blur-[120px] animate-pulse"></div>
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px]"></div>
+    {/* Primal Energy Background - Optimized Blurs */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-600/10 rounded-full blur-[80px] animate-pulse will-change-opacity"></div>
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[60px]"></div>
       <img
         src="https://images.unsplash.com/photo-1464802686167-b939a67e06a1?auto=format&fit=crop&q=80&w=2000"
         className="w-full h-full object-cover opacity-20 mix-blend-screen"
@@ -70,7 +71,7 @@ const Hero = () => (
     </div>
 
     <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-      <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8 backdrop-blur-md">
+      <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8 backdrop-blur-md hover:bg-white/10 transition-colors">
         <Sparkles className="w-4 h-4 text-amber-500 animate-spin-slow" />
         <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-300">Antes del tiempo, Akamara</span>
       </div>
@@ -87,14 +88,14 @@ const Hero = () => (
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-        <Link to="/servicios" className="group relative px-12 py-5 bg-amber-500 text-slate-950 font-black rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(245,158,11,0.5)]">
+        <Link to="/servicios" className="group relative px-12 py-5 bg-amber-500 text-slate-950 font-black rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(245,158,11,0.5)] transform-gpu">
           <span className="relative z-10 flex items-center space-x-2">
             <span>Iniciar Exploración</span>
-            <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+            <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-300" />
           </span>
           <div className="absolute inset-0 shimmer opacity-50"></div>
         </Link>
-        <button className="px-12 py-5 bg-white/5 border border-white/10 text-white font-bold rounded-full backdrop-blur-md hover:bg-white/10 transition-all">
+        <button className="px-12 py-5 bg-white/5 border border-white/10 text-white font-bold rounded-full backdrop-blur-md hover:bg-white/10 transition-all duration-300">
           Ver Nuestro Legado
         </button>
       </div>
