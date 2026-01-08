@@ -20,15 +20,16 @@ export const LEGAL_INFO = {
     location: "La Habana, Cuba",
     gaceta: "GOC-2024-EX88",
     contact: {
-        phone: "+53 5 123 4567",
-        email: "direccion@akamara.cu"
+        phone: "+53 5 8746866",
+        email: "direccion@akamara.cu",
+        person: "Jose Miguel Romero"
     }
 };
 
 export const DIVISIONS = [
     {
-        id: 'dujo',
-        title: 'Mobiliario DUJO',
+        id: 'mobiliario',
+        title: 'Mobiliario',
         subtitle: 'La Forma',
         desc: 'Diseño y fabricación de mobiliario de alto estándar para hotelería y residencias de lujo. Maderas preciosas y acabados de metal.',
         icon: <Armchair size={32} />,

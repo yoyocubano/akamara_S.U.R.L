@@ -10,7 +10,7 @@ const Navbar = () => {
   const links = [
     { name: 'Hub Principal', path: '/' },
     { name: 'Expediente Legal', path: '/legal' },
-    { name: 'Mobiliario (DUJO)', path: '/mobiliario' },
+    { name: 'Mobiliario', path: '/mobiliario' },
     { name: 'Contacto', path: '/contact' },
   ];
 
@@ -21,14 +21,12 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-amber-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
-                  <span className="text-white font-black text-2xl">A</span>
-                </div>
+                <div className="absolute inset-0 bg-amber-500 blur-md opacity-20 group-hover:opacity-60 transition-opacity duration-500"></div>
+                <img src="/src/assets/logo.png" alt="Akamara Logo" className="relative w-16 h-16 object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter text-white uppercase group-hover:text-amber-500 transition-colors duration-300">Akamara</span>
-                <span className="text-[9px] uppercase tracking-[0.4em] text-slate-400 font-bold">Business Hub Cuba</span>
+                <span className="text-[9px] uppercase tracking-[0.4em] text-slate-400 font-bold">Inicio de la Creación</span>
               </div>
             </Link>
           </div>
@@ -99,7 +97,7 @@ const Hero = () => (
       </h1>
 
       <p className="text-lg md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light italic">
-        "Akamara nace como un ecosistema multiservicios en Cuba. Desde la fabricación de mobiliario de diseño con <strong>DUJO</strong>, hasta soluciones logísticas y constructivas integrales."
+        "Akamara nace como un ecosistema multiservicios en Cuba. Desde la fabricación de mobiliario de diseño, hasta soluciones logísticas y constructivas integrales."
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -242,10 +240,10 @@ const MobiliarioSection = () => (
             División Premium
           </div>
           <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[0.9]">
-            DUJO <br /><span className="text-slate-700 text-4xl block mt-2 font-light">Espacios que Inspiran</span>
+            Mobiliario <br /><span className="text-slate-700 text-4xl block mt-2 font-light">Espacios que Inspiran</span>
           </h2>
           <p className="text-slate-400 text-lg mb-12 leading-relaxed font-light border-l-2 border-amber-500 pl-6">
-            Nuestra división de mobiliario fusiona el confort con el diseño arquitectónico. Creamos piezas que visten vestíbulos de hoteles, espacios residenciales y restaurantes con acabados exclusivos en maderas nobles y metales.
+            Nuestra división de mobiliario fusiona el confort con el diseño arquitectónico. Creamos piezas que visten vestíbulos de hoteles, espacios residenciales y restaurantes con acabados exclusivos.
           </p>
 
           <ul className="grid grid-cols-2 gap-y-4 gap-x-8 mb-12">
@@ -364,7 +362,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div className="col-span-1 md:col-span-2">
           <Link to="/" className="flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center font-black text-slate-900 text-xl">A</div>
+            <img src="/src/assets/logo.png" alt="Akamara Logo" className="w-12 h-12 object-contain" />
             <span className="text-2xl font-black uppercase tracking-tighter">Akamara S.U.R.L.</span>
           </Link>
           <p className="text-slate-500 max-w-sm text-sm leading-relaxed mb-6 italic">
