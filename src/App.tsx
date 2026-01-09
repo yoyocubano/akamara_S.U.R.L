@@ -375,12 +375,15 @@ const ContactView = () => {
     e.preventDefault();
     setSending(true);
     try {
-        await databases.createDocument(
-            APPWRITE_CONFIG.DATABASE_ID,
-            APPWRITE_CONFIG.COLLECTIONS.MESSAGES,
-            ID.unique(),
-            { ...formData, read: false }
-        );
+        // Enviar al Backend API (que guarda en DB y manda Email vía Resend)
+        const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        if (!res.ok) throw new Error('Error en el servicio de contacto');
+
         alert('Gracias. Hemos recibido tu mensaje correctamente.');
         setFormData({ name: '', company: '', division: 'Estrategia', message: '', email: '' });
     } catch (error) {

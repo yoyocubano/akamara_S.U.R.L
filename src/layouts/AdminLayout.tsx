@@ -77,6 +77,8 @@ const AICreditBalance = () => {
 const AdminLayout = () => {
     const navigate = useNavigate();
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     const handleLogout = async () => {
         try {
             await account.deleteSession('current');
@@ -87,38 +89,57 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-void flex font-sans text-white">
+        <div className="min-h-screen bg-void flex flex-col md:flex-row font-sans text-white">
+            {/* Mobile Header Toggle */}
+            <div className="md:hidden h-16 bg-slate-950 border-b border-white/5 flex items-center justify-between px-4 sticky top-0 z-30">
+                <div className="flex items-center space-x-2">
+                    <img src={logo} alt="Akamara" className="w-6 h-6 object-contain" />
+                    <span className="font-black uppercase tracking-wider text-xs">El Tablero</span>
+                </div>
+                <button 
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+                    className="p-2 text-white hover:bg-white/10 rounded"
+                >
+                    {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
             {/* Sidebar */}
-            <aside className="w-64 bg-slate-950/90 border-r border-white/5 flex flex-col fixed h-full z-20">
-                <div className="h-20 flex items-center px-6 border-b border-white/5 space-x-3">
+            <aside className={`
+                w-64 bg-slate-950/95 backdrop-blur-xl border-r border-white/5 flex flex-col fixed h-full z-40 transition-transform duration-300 ease-in-out
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+                md:translate-x-0 md:static
+            `}>
+                <div className="h-20 flex items-center px-6 border-b border-white/5 space-x-3 hidden md:flex">
                     <img src={logo} alt="Akamara" className="w-8 h-8 object-contain" />
                     <span className="font-black uppercase tracking-wider text-sm">El Tablero</span>
                 </div>
 
-                <nav className="flex-1 p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+                    {/* ... Links ... */}
                     <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-4 px-4 pt-4">Gestión</div>
 
-                    <Link to="/admin" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                    <Link to="/admin" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <LayoutDashboard className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Vista General</span>
                     </Link>
 
-                    <Link to="/admin/novedades" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                    <Link to="/admin/novedades" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <Newspaper className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Novedades</span>
                     </Link>
 
-                    <Link to="/admin/mobiliario" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                    <Link to="/admin/mobiliario" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <Package className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Mobiliario</span>
                     </Link>
 
-                    <Link to="/admin/mensajes" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                    <Link to="/admin/mensajes" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <Mail className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Mensajes</span>
                     </Link>
 
-                    <Link to="/admin/config" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                    <Link to="/admin/config" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <Settings className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Configuración</span>
                     </Link>
@@ -136,14 +157,21 @@ const AdminLayout = () => {
                 </div>
             </aside>
 
+            {/* Overlay for mobile when sidebar is open */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Main Content */}
-            <main className="flex-1 ml-64 p-8">
+            <main className="flex-1 p-4 md:p-8 w-full overflow-x-hidden">
                 <div className="max-w-5xl mx-auto">
                     <Outlet />
                 </div>
             </main>
         </div>
-    );
 };
 
 export default AdminLayout;

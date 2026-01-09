@@ -138,7 +138,9 @@ const SettingsManager = () => {
                                 <div className="relative">
                                     <Phone className="absolute left-3 top-3.5 w-5 h-5 text-slate-500" />
                                     <input
+                                        name="contact_phone"
                                         value={String(formData.contact_phone || '')}
+                                        onChange={handleChange}
                                         className="w-full bg-black/40 border border-white/10 text-white pl-10 pr-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 transition-colors"
                                     />
                                 </div>
