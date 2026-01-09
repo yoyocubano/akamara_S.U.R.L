@@ -33,7 +33,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.estrategia.subtitle',
         desc: 'divisions.estrategia.desc',
         icon: <Sparkles size={32} />,
-        image: 'https://images.unsplash.com/photo-1454165833767-0274b24f6733?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000',
         orisha: 'Orunmila',
         color: 'from-green-500/20 to-yellow-500/20'
     },
@@ -43,7 +43,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.mobiliario.subtitle',
         desc: 'divisions.mobiliario.desc',
         icon: <Armchair size={32} />,
-        image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000',
         orisha: 'Yemaya',
         color: 'from-blue-500/20 to-cyan-500/20'
     },
@@ -53,7 +53,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.construccion.subtitle',
         desc: 'divisions.construccion.desc',
         icon: <Hammer size={32} />,
-        image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1000',
         orisha: 'Shango',
         color: 'from-red-500/20 to-orange-500/20'
     },
@@ -63,7 +63,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.gastronomia.subtitle',
         desc: 'divisions.gastronomia.desc',
         icon: <ChefHat size={32} />,
-        image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://images.unsplash.com/photo-1514362545857-3bc16549766b?auto=format&fit=crop&q=80&w=1000',
         orisha: 'Olokun',
         color: 'from-blue-900/40 to-indigo-900/40'
     },
