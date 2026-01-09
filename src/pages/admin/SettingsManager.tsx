@@ -37,7 +37,10 @@ const SettingsManager = () => {
             const updates = Object.entries(formData);
             
             // Process updates sequentially to handle 'upsert' logic
-            for (const [key, value] of updates) {
+            // Process updates sequentially to handle 'upsert' logic
+            for (const [key, rawValue] of updates) {
+                const value = String(rawValue || ''); // 🛡️ Force String to avoid 'Missing attribute' error
+                
                 try {
                     // Try to create first (using key as ID for easy lookup)
                     await databases.createDocument(
