@@ -83,6 +83,28 @@ export const CATALOG_DATA: CatalogItem[] = [
     image: 'https://images.unsplash.com/photo-1542744094-3a5fc78d2243?q=80&w=800',
     type: 'product'
   },
+  {
+    id: 'escritorio-direccion-noble',
+    name_es: 'Escritorio de Dirección "Noble"',
+    name_en: '"Noble" Executive Desk',
+    category: 'office',
+    description_es: 'Mueble de mando con acabados en piel sintética y madera maciza, diseñado para la excelencia directiva.',
+    description_en: 'Command furniture with synthetic leather finishes and solid wood, designed for executive excellence.',
+    details_es: [
+      'Cajonera lateral con cierre de seguridad.',
+      'Zona de trabajo con inserción de piel.',
+      'Pasacables de aluminio cepillado.',
+      'Dimensiones personalizables según espacio.'
+    ],
+    details_en: [
+      'Lateral drawer unit with safety lock.',
+      'Work area with leather insertion.',
+      'Brushed aluminum cable glands.',
+      'Customizable dimensions according to space.'
+    ],
+    image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?q=80&w=800',
+    type: 'product'
+  },
 
   // --- SECCIÓN: HABITACIONAL (HABITATIONAL) ---
   {
@@ -105,6 +127,30 @@ export const CATALOG_DATA: CatalogItem[] = [
       'Reinforced orthopedic support.'
     ],
     image: 'https://images.unsplash.com/photo-1505693314120-0d443867821c?q=80&w=800',
+    type: 'product'
+  },
+
+  // --- SECCIÓN: EXTERIOR (OUTDOOR) ---
+  {
+    id: 'tumbona-horizonte-teal',
+    name_es: 'Tumbona Ergonómica "Horizonte"',
+    name_en: '"Horizonte" Ergonomic Lounger',
+    category: 'outdoor',
+    description_es: 'Resistente al salitre y rayos UV, ideal para hoteles de playa y piscinas privadas.',
+    description_en: 'Salt-spray and UV resistant, ideal for beach hotels and private pools.',
+    details_es: [
+      'Estructura de aluminio anodizado.',
+      'Malla técnica transpirable de alta durabilidad.',
+      'Respaldo ajustable en 5 posiciones.',
+      'Ruedas discretas para fácil desplazamiento.'
+    ],
+    details_en: [
+      'Anodized aluminum structure.',
+      'High-durability breathable technical mesh.',
+      'Adjustable backrest in 5 positions.',
+      'Discreet wheels for easy movement.'
+    ],
+    image: 'https://images.unsplash.com/photo-1511914265872-c4067ac5f448?q=80&w=800',
     type: 'product'
   },
 
@@ -196,5 +242,71 @@ export const CATALOG_DATA: CatalogItem[] = [
     ],
     image: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=800',
     type: 'service'
+  },
+  {
+    id: 'servicio-gastronomia-akamara',
+    name_es: 'Catering de Alta Gama y Eventos',
+    name_en: 'High-End Catering & Events',
+    category: 'services',
+    description_es: 'Experiencias culinarias personalizadas con productos locales de primera calidad.',
+    description_en: 'Personalized culinary experiences with premium local products.',
+    details_es: [
+      'Diseño de menú de autor bilingüe.',
+      'Personal de servicio uniformado y multilingüe.',
+      'Equipamiento gastronómico profesional de alta gama.',
+      'Gestión de maridajes y coctelería premium.'
+    ],
+    details_en: [
+      'Bilingual signature menu design.',
+      'Uniformed and multilingual service staff.',
+      'High-end professional gastronomic equipment.',
+      'Management of pairings and premium cocktails.'
+    ],
+    image: 'https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=800',
+    type: 'service'
+  },
+  {
+    id: 'cocina-minimalista-lux',
+    name_es: 'Cocina Integral "Minimalist Lux"',
+    name_en: '"Minimalist Lux" Fitted Kitchen',
+    category: 'habitational',
+    description_es: 'Mobiliario de cocina con sistemas de cierre suave y acabados ultra-mate antihuellas.',
+    description_en: 'Kitchen furniture with soft-close systems and anti-fingerprint ultra-matte finishes.',
+    details_es: [
+      'Herrajes europeos de alta resistencia.',
+      'Encimeras de piedra natural o compacta.',
+      'Integración oculta de electrodomésticos.',
+      'Iluminación LED sensorial inteligente.'
+    ],
+    details_en: [
+      'High-resistance European hardware.',
+      'Natural or compact stone countertops.',
+      'Hidden appliance integration.',
+      'Smart sensory LED lighting.'
+    ],
+    image: 'https://images.unsplash.com/photo-1556911223-44704237cdd6?q=80&w=800',
+    type: 'product'
+  },
+  {
+    id: 'mostrador-recepcion-zen',
+    name_es: 'Mostrador de Recepción "Zen"',
+    name_en: '"Zen" Reception Desk',
+    category: 'office',
+    description_es: 'Primera impresión imponente para hoteles y centros corporativos con iluminación frontal.',
+    description_en: 'Stunning first impression for hotels and corporate centers with front lighting.',
+    details_es: [
+      'Doble nivel de atención (cliente/administrativo).',
+      'Acabado en Corian o madera natural.',
+      'Gestión oculta de cables y periféricos.',
+      'Iluminación perimetral cálida regulada.'
+    ],
+    details_en: [
+      'Double level of service (customer/administrative).',
+      'Finished in Corian or natural wood.',
+      'Hidden management of cables and peripherals.',
+      'Regulated warm perimeter lighting.'
+    ],
+    image: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=800',
+    type: 'product'
   }
 ];

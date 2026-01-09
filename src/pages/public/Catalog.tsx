@@ -28,6 +28,10 @@ export const Catalog = () => {
       const img = new Image();
       img.setAttribute('crossOrigin', 'anonymous');
       img.onload = () => {
+        if (img.width === 0 || img.height === 0) {
+          reject('Invalid image dimensions');
+          return;
+        }
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
