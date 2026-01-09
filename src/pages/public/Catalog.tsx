@@ -56,7 +56,7 @@ export const Catalog = () => {
       const margin = 20;
       
       // If single item, we show a special technical sheet layout
-      if (singleItem) {
+      if (singleItem && 'id' in singleItem) {
         const name = isEs ? singleItem.name_es : singleItem.name_en;
         const desc = isEs ? singleItem.description_es : singleItem.description_en;
         const details = isEs ? singleItem.details_es : singleItem.details_en;
@@ -78,7 +78,10 @@ export const Catalog = () => {
 
         // Item Image (Large)
         try {
-          const base64Img = await getBase64ImageFromURL(`${singleItem.image}&w=800&h=600&q=90`);
+          const imageUrl = singleItem.image.includes('?') 
+            ? `${singleItem.image}&w=800&h=600&q=90`
+            : `${singleItem.image}?w=800&h=600&q=90`;
+          const base64Img = await getBase64ImageFromURL(imageUrl);
           doc.addImage(base64Img, 'JPEG', margin, 70, pageWidth - (margin * 2), 100);
         } catch (e) {
           doc.setFillColor(241, 245, 249);
@@ -246,7 +249,10 @@ export const Catalog = () => {
 
           // Image
           try {
-            const base64Img = await getBase64ImageFromURL(`${item.image}&w=400&h=300&q=80`);
+            const imageUrl = item.image.includes('?') 
+              ? `${item.image}&w=400&h=300&q=80`
+              : `${item.image}?w=400&h=300&q=80`;
+            const base64Img = await getBase64ImageFromURL(imageUrl);
             doc.addImage(base64Img, 'JPEG', margin, yp, 55, 60);
           } catch (e) {
             doc.setFillColor(241, 245, 249);
@@ -364,7 +370,7 @@ export const Catalog = () => {
           </div>
           
           <button 
-            onClick={generatePDF}
+            onClick={() => generatePDF()}
             disabled={isGenerating}
             className={`group flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all duration-700 shadow-2xl ${isGenerating ? 'opacity-50 cursor-wait' : ''}`}
           >
