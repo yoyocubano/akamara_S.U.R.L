@@ -6,7 +6,9 @@ import { Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import logo from '../assets/logo.png';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // --- MAGIC LOGIN LOGIC (LONG PRESS) ---
