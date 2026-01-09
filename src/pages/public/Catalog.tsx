@@ -141,47 +141,62 @@ export const Catalog = () => {
         y += 25;
 
         for (const item of catItems) {
-          if (y > pageHeight - 80) {
+          if (y > pageHeight - 100) {
             doc.addPage();
             y = 30;
           }
 
           const name = isEs ? item.name_es : item.name_en;
           const desc = isEs ? item.description_es : item.description_en;
+          const details = isEs ? item.details_es : item.details_en;
 
           // Item Box Border
           doc.setDrawColor(241, 245, 249);
           doc.setLineWidth(0.2);
-          doc.roundedRect(margin - 5, y - 5, pageWidth - (margin * 2) + 10, 60, 3, 3);
+          doc.roundedRect(margin - 5, y - 5, pageWidth - (margin * 2) + 10, 85, 3, 3);
 
           // Image
           try {
             const base64Img = await getBase64ImageFromURL(`${item.image}&w=400&h=300&q=80`);
-            doc.addImage(base64Img, 'JPEG', margin, y, 45, 50);
+            doc.addImage(base64Img, 'JPEG', margin, y, 55, 60);
           } catch (e) {
             doc.setFillColor(241, 245, 249);
-            doc.rect(margin, y, 45, 50, 'F');
+            doc.rect(margin, y, 55, 60, 'F');
             doc.setFontSize(8);
-            doc.text('N/A', margin + 20, y + 25);
+            doc.text('N/A', margin + 25, y + 30);
           }
 
           // Item Info
           doc.setTextColor(15, 23, 42);
           doc.setFontSize(14);
           doc.setFont('helvetica', 'bold');
-          doc.text(name, margin + 55, y + 10);
+          doc.text(name, margin + 65, y + 10);
           
           doc.setFontSize(9);
           doc.setTextColor(245, 158, 11);
-          doc.text(item.type === 'product' ? (isEs ? 'PRODUCTO PREMIUM' : 'PREMIUM PRODUCT') : (isEs ? 'SERVICIO INTEGRAL' : 'INTEGRAL SERVICE'), margin + 55, y + 16);
+          doc.text(item.type === 'product' ? (isEs ? 'PRODUCTO PREMIUM' : 'PREMIUM PRODUCT') : (isEs ? 'SERVICIO INTEGRAL' : 'INTEGRAL SERVICE'), margin + 65, y + 16);
           
           doc.setTextColor(71, 85, 105);
           doc.setFont('helvetica', 'normal');
-          doc.setFontSize(11);
-          const splitDesc = doc.splitTextToSize(desc, pageWidth - margin - 55 - margin);
-          doc.text(splitDesc, margin + 55, y + 25);
+          doc.setFontSize(10);
+          const splitDesc = doc.splitTextToSize(desc, pageWidth - margin - 65 - margin);
+          doc.text(splitDesc, margin + 65, y + 24);
 
-          y += 70;
+          // Details / Bullet points
+          doc.setFontSize(8);
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(15, 23, 42);
+          doc.text(isEs ? 'ESPECIFICACIONES:' : 'SPECIFICATIONS:', margin + 65, y + 40);
+          
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(100, 116, 139);
+          let detailY = y + 45;
+          details.forEach((detail) => {
+            doc.text(`• ${detail}`, margin + 68, detailY);
+            detailY += 5;
+          });
+
+          y += 95;
         }
       }
 
