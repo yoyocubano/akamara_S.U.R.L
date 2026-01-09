@@ -211,10 +211,11 @@ const LegalSection = () => (
 
 
 const DivisionCard = ({ id, icon, title, subtitle, desc, image, color }: { id: string, icon: any, title: string, subtitle: string, desc: string, image: string, color: string }) => {
+  const { t } = useTranslation();
   return (
     <Link to={`/division/${id}`} className="group bg-slate-900 border border-white/5 rounded-[2rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 relative h-[500px] flex flex-col">
       <div className="absolute inset-0 z-0">
-        <img src={image} className="w-full h-full object-cover opacity-40 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" alt={title} />
+        <img src={image} className="w-full h-full object-cover opacity-40 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" alt={t(title)} />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/0 via-slate-950/80 to-slate-950"></div>
         <div className={`absolute inset-0 bg-gradient-to-tr ${color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
       </div>
@@ -224,10 +225,10 @@ const DivisionCard = ({ id, icon, title, subtitle, desc, image, color }: { id: s
           {icon}
         </div>
 
-        <span className="text-[10px] uppercase tracking-[0.3em] font-black text-amber-500 mb-2">{subtitle}</span>
-        <h3 className="text-3xl font-black text-white mb-4 leading-none">{title}</h3>
+        <span className="text-[10px] uppercase tracking-[0.3em] font-black text-amber-500 mb-2">{t(subtitle)}</span>
+        <h3 className="text-3xl font-black text-white mb-4 leading-none">{t(title)}</h3>
         <p className="text-slate-400 text-sm leading-relaxed mb-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-          {desc}
+          {t(desc)}
         </p>
 
         <div className="mt-auto flex justify-between items-center border-t border-white/10 pt-6">

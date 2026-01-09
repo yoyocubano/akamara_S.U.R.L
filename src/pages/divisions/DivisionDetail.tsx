@@ -3,77 +3,68 @@ import { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { DIVISIONS } from '../../constants';
 import { ArrowLeft, Sparkles, Shield, Rocket, Users, Zap, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const DIVISION_DETAILS: Record<string, any> = {
+const DIVISION_THEMES: Record<string, any> = {
     estrategia: {
         theme: 'bg-green-950/20 text-green-500 border-green-500/30',
         accent: 'text-yellow-500',
         gradient: 'from-green-500/20 to-yellow-500/10',
-        orisha: 'Orunmila',
-        fullTitle: 'Estrategia y Consultoría Inteligente',
-        vision: 'La sabiduría de Orunmila guía cada decisión comercial, transformando la incertidumbre en destinos claros y prósperos.',
-        points: ['Análisis de Mercado 360', 'Optimización de Procesos SURL', 'Gestión de Proyectos VIP', 'Consultoría en Inversión Extranjera'],
-        cta: 'Consultar el Oráculo Akamara'
+        orisha: 'Orunmila'
     },
     mobiliario: {
         theme: 'bg-blue-950/20 text-blue-500 border-blue-500/30',
         accent: 'text-cyan-400',
         gradient: 'from-blue-600/20 to-cyan-500/10',
-        orisha: 'Yemayá',
-        fullTitle: 'Mobiliario de Diseño y Confort',
-        vision: 'Como el abrazo de Yemayá, nuestros espacios fluyen con elegancia y serenidad, creando hogares y hoteles de ensueño.',
-        points: ['Mobiliario Contract (Hotelería)', 'Línea Residencial de Lujo', 'Diseño de Interiores Personalizado', 'Carpintería de Maderas Preciosas'],
-        cta: 'Crear mi Espacio Ideal'
+        orisha: 'Yemayá'
     },
     construccion: {
         theme: 'bg-red-950/20 text-red-500 border-red-500/30',
         accent: 'text-orange-500',
         gradient: 'from-red-600/20 to-orange-500/10',
-        orisha: 'Shangó',
-        fullTitle: 'Construcción Civil e Ingeniería',
-        vision: 'La fuerza imparable de Shangó se materializa en estructuras sólidas, combinando la potencia de la obra con la belleza del rayo.',
-        points: ['Mantenimiento Integral de Inmuebles', 'Remodelación de Espacios Comerciales', 'Infraestructura de Energía Renovables', 'Brigadas Especialistas en Acabados'],
-        cta: 'Iniciar mi Obra Maestra'
+        orisha: 'Shangó'
     },
     gastronomia: {
         theme: 'bg-indigo-950/20 text-indigo-400 border-indigo-500/30',
         accent: 'text-blue-400',
         gradient: 'from-blue-900/40 to-indigo-900/10',
-        orisha: 'Olokun',
-        fullTitle: 'Gastronomía y Catering de Autor',
-        vision: 'Desde la profundidad de los secretos de Olokun, emergen banquetes que nutren el alma y elevan cualquier celebración.',
-        points: ['Catering para Eventos Corporativos', 'Servicio de Comedor Institucional', 'Suministros Alimenticios de Calidad', 'Gestión de Banquetes y Protocolo'],
-        cta: 'Degustar la Excelencia'
+        orisha: 'Olokun'
     },
     logistica: {
         theme: 'bg-slate-900 text-red-500 border-red-900/30',
         accent: 'text-red-700',
         gradient: 'from-red-800/20 to-black/30',
-        orisha: 'Eshú',
-        fullTitle: 'Logística y Transporte Nacional',
-        vision: 'Eshú abre los caminos y asegura que cada recurso fluya sin obstáculos a través de la geografía cubana.',
-        points: ['Transporte de Carga Especializada', 'Gestión de Almacenes y Distribución', 'Mensajería y Envíos Express', 'Logística de Abastecimiento Crítico'],
-        cta: 'Abrir nuevos Caminos'
+        orisha: 'Eshú'
     }
 };
 
 export default function DivisionDetail() {
     const { id } = useParams();
+    const { t } = useTranslation();
     const division = DIVISIONS.find(d => d.id === id);
-    const detail = id ? DIVISION_DETAILS[id] : null;
+    const theme = id ? DIVISION_THEMES[id] : null;
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [id]);
 
-    if (!division || !detail) {
+    if (!division || !theme) {
         return <Navigate to="/" replace />;
     }
+
+    // Dynamic Translation Data
+    const fullTitle = t(`divisions.${id}.fullTitle`);
+    const vision = t(`divisions.${id}.vision`);
+    const cta = t(`divisions.${id}.cta`);
+
+    // Points are returned as an object {0: "", 1: ""} from i18n
+    const pointsObj = t(`divisions.${id}.points`, { returnObjects: true }) as Record<string, string>;
+    const points = Object.values(pointsObj || {});
 
     return (
         <div className="min-h-screen bg-slate-950 text-white pt-32 pb-20 relative overflow-hidden">
             {/* Visual background dedicated to the Orisha */}
-            <div className={`absolute inset-0 z-0 opacity-10 blur-[120px] bg-gradient-to-tr ${detail.gradient}`}></div>
+            <div className={`absolute inset-0 z-0 opacity-10 blur-[120px] bg-gradient-to-tr ${theme.gradient}`}></div>
 
             <div className="max-w-6xl mx-auto px-4 relative z-10">
                 <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-amber-500 transition-colors mb-12 group">
@@ -83,23 +74,23 @@ export default function DivisionDetail() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                     <div>
-                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border mb-6 ${detail.theme}`}>
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border mb-6 ${theme.theme}`}>
                             <Sparkles className="w-3 h-3" />
-                            <span className="text-[9px] uppercase tracking-[0.3em] font-black">{detail.orisha}</span>
+                            <span className="text-[9px] uppercase tracking-[0.3em] font-black">{theme.orisha}</span>
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
-                            {detail.fullTitle}
+                            {fullTitle}
                         </h1>
 
                         <p className="text-xl text-slate-400 italic mb-10 leading-relaxed font-light border-l-4 border-amber-500 pl-8">
-                            "{detail.vision}"
+                            "{vision}"
                         </p>
 
                         <div className="space-y-4 mb-12">
-                            {detail.points.map((point: string, i: number) => (
+                            {points.map((point: string, i: number) => (
                                 <div key={i} className="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
-                                    <CheckCircle2 className={`w-5 h-5 ${detail.accent}`} />
+                                    <CheckCircle2 className={`w-5 h-5 ${theme.accent}`} />
                                     <span className="text-slate-300 font-bold text-sm tracking-wide">{point}</span>
                                 </div>
                             ))}
@@ -109,15 +100,15 @@ export default function DivisionDetail() {
                             to="/contact"
                             className={`inline-flex items-center gap-4 px-10 py-5 bg-amber-500 text-slate-950 font-black rounded-full hover:scale-105 transition-all shadow-2xl shadow-amber-500/20`}
                         >
-                            <span>{detail.cta}</span>
+                            <span>{cta}</span>
                             <Rocket className="w-5 h-5" />
                         </Link>
                     </div>
 
                     <div className="relative">
-                        <div className={`absolute inset-0 bg-gradient-to-tr ${detail.gradient} blur-3xl rounded-full opacity-30`}></div>
+                        <div className={`absolute inset-0 bg-gradient-to-tr ${theme.gradient} blur-3xl rounded-full opacity-30`}></div>
                         <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-3xl transform rotate-1 group">
-                            <img src={division.image} alt={division.title} className="w-full h-[600px] object-cover group-hover:scale-110 transition-transform duration-1000" />
+                            <img src={division.image} alt={t(division.title)} className="w-full h-[600px] object-cover group-hover:scale-110 transition-transform duration-1000" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
 
                             <div className="absolute bottom-10 left-10 p-8 backdrop-blur-md bg-white/5 rounded-3xl border border-white/10">
