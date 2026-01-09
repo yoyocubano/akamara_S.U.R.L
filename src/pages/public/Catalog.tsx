@@ -19,7 +19,7 @@ export const Catalog = () => {
   const filteredItems = CATALOG_DATA.filter(item => {
     const matchesFilter = filter === 'all' || item.type === filter;
     const name = isSpanish ? item.name_es : item.name_en;
-    const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = name?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -43,6 +43,15 @@ export const Catalog = () => {
       img.onerror = () => reject('Error loading image');
       img.src = url;
     });
+  };
+
+  const downloadPremiumCatalog = () => {
+    const link = document.createElement('a');
+    link.href = '/AKAMARA_CATALOG_PREMIUM_2026.pdf';
+    link.download = `AKAMARA_CATALOG_PREMIUM_2026_${(i18n.language || 'es').toUpperCase()}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const generatePDF = async (singleItem?: CatalogItem) => {
@@ -370,21 +379,16 @@ export const Catalog = () => {
           </div>
           
           <button 
-            onClick={() => generatePDF()}
-            disabled={isGenerating}
-            className={`group flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all duration-700 shadow-2xl ${isGenerating ? 'opacity-50 cursor-wait' : ''}`}
+            onClick={downloadPremiumCatalog}
+            className="group flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all duration-700 shadow-2xl"
           >
-            {isGenerating ? (
-              <Loader2 size={24} className="animate-spin" />
-            ) : (
-              <Download size={24} className="group-hover:translate-y-1 transition-transform" />
-            )}
+            <Download size={24} className="group-hover:translate-y-1 transition-transform" />
             <div className="flex flex-col items-start text-left">
               <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">
-                {isGenerating ? (isSpanish ? 'PROCESANDO...' : 'PROCESSING...') : (isSpanish ? 'OBTENER ARCHIVO' : 'GET FILE')}
+                {isSpanish ? 'DESCARGAR AHORA' : 'DOWNLOAD NOW'}
               </span>
               <span className="text-xs font-bold opacity-70 leading-none">
-                {isSpanish ? 'Catálogo 2026 (Premium PDF)' : '2026 Catalog (Premium PDF)'}
+                {isSpanish ? 'Catálogo Premium 2026 (PDF)' : '2026 Premium Catalog (PDF)'}
               </span>
             </div>
           </button>
