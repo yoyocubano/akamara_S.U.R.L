@@ -1,7 +1,7 @@
 
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { account } from '../lib/appwrite';
-import { LayoutDashboard, Newspaper, Package, LogOut, Settings, Sparkles, AlertCircle, Mail } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Package, LogOut, Settings, Sparkles, AlertCircle, Mail, BarChart3 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
 
@@ -138,6 +138,12 @@ const AdminLayout = () => {
                         <Mail className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
                         <span className="text-sm font-bold tracking-wide">Mensajes</span>
                     </Link>
+
+                    <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
+                        <BarChart3 className="w-5 h-5 group-hover:text-amber-500 transition-colors" />
+                        <span className="text-sm font-bold tracking-wide">Analítica Global</span>
+                        <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded ml-auto">CF</span>
+                    </a>
 
                     <Link to="/admin/config" onClick={() => setIsSidebarOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors group">
                         <Settings className="w-5 h-5 group-hover:text-amber-500 transition-colors" />

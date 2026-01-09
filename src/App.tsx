@@ -16,6 +16,7 @@ import MobiliarioManager from './pages/admin/MobiliarioManager';
 import MessagesManager from './pages/admin/MessagesManager';
 import { databases, APPWRITE_CONFIG } from './lib/appwrite';
 import { ID, Query } from 'appwrite';
+import { AnaliticaDeClientes } from './utils/AnaliticaDeClientes';
 // Init
 
 import './i18n';
@@ -558,37 +559,8 @@ const App = () => {
   
 
   useEffect(() => {
-    const trackVisit = async () => {
-      try {
-        // Generate or retrieve anonymous session ID
-        let visitorId = localStorage.getItem('akamara_visitor_id');
-        if (!visitorId) {
-          visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-          localStorage.setItem('akamara_visitor_id', visitorId);
-        }
-
-
-        try {
-          await databases.createDocument(
-            APPWRITE_CONFIG.DATABASE_ID,
-            APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-            ID.unique(),
-            {
-              page: location.pathname + location.search,
-              visitor_id: visitorId,
-              screen_size: `${window.innerWidth}x${window.innerHeight}`,
-              user_agent: navigator.userAgent
-            }
-          );
-        } catch (error) {
-           console.warn('Tracking error:', error);
-        }
-      } catch (err) {
-        // Silent fail for analytics
-      }
-    };
-
-    trackVisit();
+    // Usar la Herramienta de Analítica Reutilizable
+    AnaliticaDeClientes.trackVisit(location.pathname + location.search);
   }, [location]);
 
   useEffect(() => {
