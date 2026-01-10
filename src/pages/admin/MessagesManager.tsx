@@ -14,6 +14,36 @@ export default function MessagesManager() {
 
     const fetchMessages = async () => {
         try {
+            // --- AUTO-CLEANUP: Delete messages older than 10 days ---
+            // This runs client-side for Akamara (Appwrite) as instructed to match Welux features
+            try {
+                const tenDaysAgo = new Date();
+                tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+                
+                // 1. List old documents
+                const oldDocs = await databases.listDocuments(
+                    APPWRITE_CONFIG.DATABASE_ID,
+                    APPWRITE_CONFIG.COLLECTIONS.MESSAGES,
+                    [Query.lessThan('$createdAt', tenDaysAgo.toISOString())]
+                );
+
+                // 2. Delete them one by one (Appwrite bulk delete depends on version/permissions, safety first)
+                if (oldDocs.total > 0) {
+                    console.log(`🧹 Auto-Cleanup: Removing ${oldDocs.total} old messages...`);
+                    await Promise.all(oldDocs.documents.map(doc => 
+                        databases.deleteDocument(
+                            APPWRITE_CONFIG.DATABASE_ID, 
+                            APPWRITE_CONFIG.COLLECTIONS.MESSAGES, 
+                            doc.$id
+                        )
+                    ));
+                }
+            } catch (cleanupError) {
+                console.warn("Auto-cleanup warning:", cleanupError);
+                // Continue fetching even if cleanup fails
+            }
+            // -----------------------------------------------------
+
             const response = await databases.listDocuments(
                 APPWRITE_CONFIG.DATABASE_ID,
                 APPWRITE_CONFIG.COLLECTIONS.MESSAGES,
