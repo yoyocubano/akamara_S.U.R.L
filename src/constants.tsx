@@ -53,7 +53,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.construccion.subtitle',
         desc: 'divisions.construccion.desc',
         icon: <Hammer size={32} />,
-        image: 'https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=2597&auto=format&fit=crop', // Construction/Architecture
+        image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2670&auto=format&fit=crop', // Construction Site (Updated)
         orisha: 'Shango',
         color: 'from-red-500/20 to-orange-500/20'
     },
@@ -73,7 +73,7 @@ export const DIVISIONS = [
         subtitle: 'divisions.logistica.subtitle',
         desc: 'divisions.logistica.desc',
         icon: <Truck size={32} />,
-        image: 'https://images.unsplash.com/photo-1494412574643-353ec4f00dce?q=80&w=2574&auto=format&fit=crop', // Logistics/Airport
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2670&auto=format&fit=crop', // Logistics/Warehouse (Updated)
         orisha: 'Eshu',
         color: 'from-red-600/20 to-black/20'
     }
