@@ -1,53 +1,57 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
+# .idx/dev.nix
 { pkgs, ... }: {
-  # Which nixpkgs channel to use.
-  channel = "stable-24.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
+  # Usar un canal estable y reciente para tener paquetes actualizados
+  channel = "stable-24.05";
+
+  # Paquetes para el entorno de desarrollo
   packages = [
-    # pkgs.go
-    # pkgs.python311
-    # pkgs.python311Packages.pip
-    # pkgs.nodejs_20
-    # pkgs.nodePackages.nodemon
+    pkgs.nodejs_20
+    pkgs.python3
+    pkgs.wrangler # Para Cloudflare Workers
+    pkgs.pnpm     # Recomendado por welux-events/DEPLOY_PROTOCOL.md
   ];
-  # Sets environment variables in the workspace
+
+  # Las variables de entorno se pueden definir aquí si es necesario
   env = {};
+
+  # Configuración específica de IDX
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
+    # Extensiones de VS Code recomendadas
     extensions = [
-      # "vscodevim.vim"
-      "google.gemini-cli-vscode-ide-companion"
+      "dbaeumer.vscode-eslint" # ID oficial de la extensión ESLint
+      "esbenp.prettier-vscode"
+      "bradlc.vscode-tailwindcss"
     ];
-    # Enable previews
+
+    # Configurar vistas previas simultáneas para ambos proyectos
     previews = {
       enable = true;
       previews = {
-        # web = {
-        #   # Example: run "npm run dev" with PORT set to IDX's defined port for previews,
-        #   # and show it in IDX's web preview panel
-        #   command = ["npm" "run" "dev"];
-        #   manager = "web";
-        #   env = {
-        #     # Environment variables to set for your server
-        #     PORT = "$PORT";
-        #   };
-        # };
+        # 1. Vista Previa para Welux Events
+        web-welux = {
+          cwd = "welux-events"; 
+          # Usar pnpm según el DEPLOY_PROTOCOL.md del proyecto
+          command = ["pnpm", "run", "dev", "--", "--port", "$PORT", "--host", "0.0.0.0"];
+          manager = "web";
+        };
+
+        # 2. Vista Previa para Akamara
+        web-akamara = {
+          # Corregido el nombre de la carpeta según la estructura de tu proyecto
+          cwd = "akamara_sarl";
+          command = ["npm", "run", "dev", "--", "--port", "$PORT", "--host", "0.0.0.0"];
+          manager = "web";
+        };
       };
     };
-    # Workspace lifecycle hooks
+
+    # Instalar dependencias automáticamente al crear el espacio de trabajo
     workspace = {
-      # Runs when a workspace is first created
       onCreate = {
-        # Example: install JS dependencies from NPM
-        # npm-install = "npm install";
-        # Open editors for the following files by default, if they exist:
-        default.openFiles = [ ".idx/dev.nix" "README.md" ];
-      };
-      # Runs when the workspace is (re)started
-      onStart = {
-        # Example: start a background task to watch and re-build backend code
-        # watch-backend = "npm run watch-backend";
+        # Usar pnpm para Welux Events
+        install-welux = "cd welux-events && pnpm install";
+        # Usar npm para Akamara (asumiendo que usa npm)
+        install-akamara = "cd akamara_sarl && npm install";
       };
     };
   };
