@@ -216,11 +216,70 @@ export const Catalog = () => {
       const splitPhilosophy = doc.splitTextToSize(philosophyText, pageWidth - (margin * 2.5));
       doc.text(splitPhilosophy, margin, 65);
 
+
+      // --- PAGE 3: EXCLUSIVE SHOWCASE (NEW) ---
+      doc.addPage();
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+      doc.setTextColor(245, 158, 11);
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.text(isEs ? 'GALERÍA EXCLUSIVA' : 'EXCLUSIVE GALLERY', margin, 30);
+      
+      doc.setDrawColor(255, 255, 255);
+      doc.setLineWidth(0.5);
+      doc.line(margin, 35, pageWidth - margin, 35);
+
+      // Load and display showcase slides
+      const slides = [
+        '/images/mobiliario_slides/slide1.jpg',
+        '/images/mobiliario_slides/slide2.jpg',
+        '/images/mobiliario_slides/slide3.jpg',
+        '/images/mobiliario_slides/slide4.jpg',
+        '/images/mobiliario_slides/slide5.jpg'
+      ];
+
+      // Grid layout for 5 images: 2 top, 2 middle, 1 bottom large
+      // Or just a simple vertical layout
+      let yGallery = 50;
+      for (let i = 0; i < slides.length; i++) {
+         try {
+             // For layout simple: 2 per page or 3 per page? 
+             // Let's do a simple full page collage if possible, or new pages.
+             // Given 5 images, let's fit 2 per page to be safe with margins.
+             if (yGallery > pageHeight - 100) {
+                 doc.addPage();
+                 doc.setFillColor(15, 23, 42);
+                 doc.rect(0, 0, pageWidth, pageHeight, 'F');
+                 yGallery = 30;
+             }
+             
+             const imgData = await getBase64ImageFromURL(slides[i]);
+             const imgHeight = 80;
+             const imgWidth = 120;
+             const xPos = (pageWidth - imgWidth) / 2;
+             
+             doc.addImage(imgData, 'JPEG', xPos, yGallery, imgWidth, imgHeight);
+             
+             // Simple frame
+             doc.setDrawColor(245, 158, 11);
+             doc.rect(xPos - 1, yGallery - 1, imgWidth + 2, imgHeight + 2);
+             
+             yGallery += imgHeight + 15;
+
+         } catch (e) {
+             console.warn('Could not load slide for PDF', slides[i]);
+         }
+      }
+
+
       // --- PRODUCT PAGES ---
       let yp = 30;
       doc.addPage();
       
-      // Group items by category for the PDF
+      // ... rest of existing code ...
+
       const categoriesOrder = ['seats', 'tables', 'habitational', 'outdoor', 'office', 'special', 'services'];
       
       for (const cat of categoriesOrder) {
@@ -379,10 +438,17 @@ export const Catalog = () => {
           </div>
           
           <button 
-            onClick={downloadPremiumCatalog}
-            className="group flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all duration-700 shadow-2xl"
+            onClick={() => generatePDF()}
+            disabled={isGenerating}
+            className={`group flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all duration-700 shadow-2xl ${
+                isGenerating ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
-            <Download size={24} className="group-hover:translate-y-1 transition-transform" />
+            {isGenerating ? (
+                <Loader2 size={24} className="animate-spin" />
+            ) : (
+                <Download size={24} className="group-hover:translate-y-1 transition-transform" />
+            )}
             <div className="flex flex-col items-start text-left">
               <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">
                 {isSpanish ? 'DESCARGAR AHORA' : 'DOWNLOAD NOW'}
