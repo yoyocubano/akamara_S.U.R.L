@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { databases, storage, APPWRITE_CONFIG } from '../../lib/appwrite';
 import { ID, Query } from 'appwrite';
 import { Plus, Trash2, Edit2, X, Image as ImageIcon, Search, MonitorPlay } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function MobiliarioManager() {
     const [view, setView] = useState<'products' | 'presentation'>('products');
@@ -154,8 +155,8 @@ export default function MobiliarioManager() {
 
 
     return (
-        <div className="space-y-8 p-6 text-slate-300">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="space-y-6 md:space-y-8 p-4 md:p-8 text-slate-300">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
                     <h2 className="text-3xl font-black text-white">Gestión de Mobiliario</h2>
                     <p className="text-slate-500">Administra catálogo y presentaciones.</p>
@@ -352,37 +353,32 @@ export default function MobiliarioManager() {
                 </>
             )}
 
-            {/* PRESENTATION VIEW */}
             {view === 'presentation' && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {slides.map(file => {
-                        // Construct preview URL
-                        const bucketId = APPWRITE_CONFIG.BUCKETS.IMAGES;
-                        const fileId = file.$id;
-                        // We use the endpoint pattern: ENDPOINT/storage/buckets/BUCKET/files/FILE/view?project=PROJECT&mode=admin
-                        // But easier to use storage.getFileView(bucket, fileId) to get the url
-                        const previewUrl = storage.getFileView(bucketId, fileId).href;
+                <div className="max-w-6xl mx-auto">
+                    <div className="flex items-center justify-between mb-6">
+                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                            <MonitorPlay className="text-amber-500" />
+                            Imágenes del Slideshow
+                         </h3>
+                         <span className="text-xs font-mono text-slate-500">{slides.length} slides activos</span>
+                    </div>
 
-                        return (
-                             <div key={fileId} className="group relative bg-slate-900 rounded-2xl overflow-hidden aspect-video border border-white/5 hover:border-amber-500/50 transition-all">
-                                <img src={previewUrl} className="w-full h-full object-cover" alt={file.name} />
-                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <button 
-                                        onClick={() => handleDeleteSlide(fileId)}
-                                        className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-xs"
-                                    >
-                                        Eliminar
-                                    </button>
-                                </div>
-                                <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2 text-[10px] text-slate-300 truncate">
-                                    {file.name}
-                                </div>
-                             </div>
-                        )
-                    })}
-                     {slides.length === 0 && !loading && (
-                        <div className="col-span-full text-center py-20 border-2 border-dashed border-white/5 rounded-3xl">
-                            <p className="text-slate-500">No hay imágenes en la presentación. Sube algunas.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {slides.map(file => (
+                            <SlideItem 
+                                key={file.$id} 
+                                file={file} 
+                                bucketId={APPWRITE_CONFIG.BUCKETS.IMAGES} 
+                                onDelete={handleDeleteSlide} 
+                            />
+                        ))}
+                    </div>
+                    
+                    {slides.length === 0 && !loading && (
+                        <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl bg-slate-900/50">
+                            <MonitorPlay className="mx-auto text-slate-600 mb-4" size={48} />
+                            <p className="text-slate-400 font-medium">La presentación está vacía.</p>
+                            <p className="text-slate-600 text-sm mt-2">Usa el botón "SUBIR SLIDE" arriba para agregar imágenes.</p>
                         </div>
                     )}
                 </div>
@@ -390,6 +386,70 @@ export default function MobiliarioManager() {
         </div>
     );
 }
+
+// Extracted Component for Swipe Logic
+const SlideItem = ({ file, bucketId, onDelete }: { file: any, bucketId: string, onDelete: (id: string) => void }) => {
+    const previewUrl = storage.getFileView(bucketId, file.$id).href;
+
+    // Simple Swipe Logic
+    // Drag Right -> Delete
+    // Using simple dragEnd detection
+    
+    return (
+        <div className="relative group rounded-3xl overflow-hidden aspect-video bg-red-600/20 border border-white/5">
+            {/* Background Action Layer (Red for Delete) */}
+            <div className="absolute inset-0 flex items-center justify-start pl-8 text-red-500 font-bold tracking-widest uppercase text-xs z-0 pointer-events-none">
+                <Trash2 size={24} className="mr-2" />
+                Eliminar
+            </div>
+            
+            {/* Draggable Card */}
+            <motion.div
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={(_, info) => {
+                    if (info.offset.x > 100) {
+                        onDelete(file.$id);
+                    }
+                }}
+                className="relative w-full h-full bg-slate-900 z-10 cursor-grab active:cursor-grabbing border border-white/5 rounded-3xl overflow-hidden"
+                style={{ touchAction: "pan-y" }} // Allow vertical scroll
+                whileTap={{ scale: 0.98 }}
+            >
+                <img 
+                    src={previewUrl} 
+                    className="w-full h-full object-cover pointer-events-none select-none" 
+                    alt={file.name} 
+                    loading="lazy"
+                />
+                
+                {/* Desktop Hover Actions (Keep for PC) */}
+                <div className="hidden md:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex-col items-center justify-center gap-2 p-4 text-center backdrop-blur-sm">
+                    <p className="text-xs text-slate-300 font-mono mb-2 truncate max-w-full px-2">{file.name}</p>
+                    <button 
+                        onClick={() => onDelete(file.$id)}
+                        className="bg-red-500/20 text-red-500 border border-red-500/50 px-6 py-2 rounded-full font-bold text-xs hover:bg-red-500 hover:text-white transition-all uppercase tracking-wider flex items-center gap-2"
+                    >
+                        <Trash2 size={16} />
+                        Eliminar Slide
+                    </button>
+                </div>
+
+                {/* Mobile Badge */}
+                <div className="absolute top-3 left-3 bg-black/50 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-md border border-white/10 pointer-events-none">
+                     SLIDE
+                </div>
+                 {/* Mobile Hint */}
+                <div className="md:hidden absolute bottom-3 right-3 text-white/30 text-[10px] bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm pointer-events-none">
+                    Slide ⮕
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
+
 
 
 // Helper prop fix for button

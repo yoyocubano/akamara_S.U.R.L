@@ -15,7 +15,7 @@ export const onRequestPost = async (context) => {
     
     // Resend Config
     const RESEND_KEY = env.AKAMARA_RESEND_API_KEY || env.RESEND_API_KEY;
-    const MAIL_FROM = env.AKAMARA_MAIL_FROM || 'onboarding@resend.dev';
+    const MAIL_FROM = env.AKAMARA_SENDER_EMAIL || 'onboarding@resend.dev';
 
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ error: 'Faltan campos requeridos' }), { 

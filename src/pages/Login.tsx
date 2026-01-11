@@ -102,12 +102,23 @@ const Login = () => {
 
             <div className="w-full max-w-md bg-slate-950/80 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl relative z-10 my-auto">
                 <div className="flex flex-col items-center mb-8">
-                    <div className="relative group perspective-[1000px] mb-4">
+                    <div className="relative mb-4 group perspective-[1000px]">
                         <div className="absolute inset-0 bg-amber-500 blur-md opacity-20 group-hover:opacity-50 transition-opacity duration-500"></div>
                         <img src={logo} alt="Akamara" className="w-20 h-20 object-contain drop-shadow-2xl logo-beat" />
                     </div>
-                   <h2 className="text-2xl font-black text-white uppercase tracking-wider">El Tablero</h2>
-                    <p className="text-amber-500 text-xs uppercase tracking-[0.3em] font-bold">Acceso Restringido</p>
+                    
+                    <h2 className="text-3xl font-black text-white uppercase tracking-wider mb-2">AKAMARA</h2>
+                    
+                    <p 
+                        className={`text-amber-500 text-[10px] uppercase tracking-[0.4em] font-bold cursor-pointer select-none transition-all duration-700 ${isPressing ? 'text-red-500 scale-110 animate-pulse' : 'hover:text-amber-400'}`}
+                        onMouseDown={startMagicTimer}
+                        onMouseUp={cancelMagicTimer}
+                        onMouseLeave={cancelMagicTimer}
+                        onTouchStart={startMagicTimer}
+                        onTouchEnd={cancelMagicTimer}
+                    >
+                        {isPressing ? 'ACCEDIENDO...' : 'INICIO DE LA CREACIÓN'}
+                    </p>
                 </div>
 
                 {error && (
@@ -158,22 +169,7 @@ const Login = () => {
                 </form>
             </div>
 
-            {/* MAGIC FOOTER SECRETO */}
-            <div className="absolute bottom-4 z-20 opacity-30 hover:opacity-100 transition-opacity">
-                <div 
-                    className={`flex flex-col items-center gap-1 cursor-pointer select-none ${isPressing ? 'scale-95 grayscale' : ''} transition-all duration-1000`}
-                    onMouseDown={startMagicTimer}
-                    onMouseUp={cancelMagicTimer}
-                    onMouseLeave={cancelMagicTimer}
-                    onTouchStart={startMagicTimer}
-                    onTouchEnd={cancelMagicTimer}
-                >
-                    <img src={logo} alt="Security Check" className="w-6 h-6 object-contain" />
-                    <span className="text-[10px] text-slate-600 font-mono tracking-tighter">
-                        {isPressing ? 'VERIFICANDO BIOMETRÍA...' : 'SECURE SYSTEM v2.0'}
-                    </span>
-                </div>
-            </div>
+
         </div>
     );
 };

@@ -1,5 +1,5 @@
 
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { account } from '../../lib/appwrite';
 import { Sparkles } from 'lucide-react';
@@ -38,9 +38,7 @@ const ProtectedRoute = () => {
     }
 
     if (!isAuthenticated) {
-        // Simple redirect
-        window.location.hash = '#/login';
-        return null;
+        return <Navigate to="/login" replace />;
     }
 
     return <Outlet />;

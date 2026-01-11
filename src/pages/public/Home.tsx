@@ -7,6 +7,7 @@ import { DIVISIONS } from '../../constants';
 import { databases, APPWRITE_CONFIG } from '../../lib/appwrite';
 import { Query } from 'appwrite';
 import { LegalSection } from './Legal';
+import { HeroSection } from '../../components/ui/HeroSection';
 
 
 // --- SUB-COMPONENTS ---
@@ -213,20 +214,20 @@ export const Hero = () => {
     return (
       <section className="py-32 bg-slate-950 relative border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center gap-20">
+          <div className="flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-20">
             <div className="lg:w-1/2">
               <div className="inline-block px-4 py-2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] rounded mb-8">
                 {t('furniture_section.badge')}
               </div>
-              <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[0.9]">
-                {t('furniture_section.title_main')} <br /><span className="text-slate-700 text-4xl block mt-2 font-light">{t('furniture_section.title_sub')}</span>
+              <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-white mb-6 lg:mb-8 leading-[0.9]">
+                {t('furniture_section.title_main')} <br /><span className="text-slate-700 text-3xl lg:text-4xl block mt-2 font-light">{t('furniture_section.title_sub')}</span>
               </h2>
-              <p className="text-slate-400 text-lg mb-12 leading-relaxed font-light border-l-2 border-amber-500 pl-6">
+              <p className="text-slate-400 text-base lg:text-lg mb-8 lg:mb-12 leading-relaxed font-light border-l-2 border-amber-500 pl-6">
                 {t('furniture_section.desc')}
               </p>
   
               {items.length > 0 ? (
-                  <ul className="grid grid-cols-2 gap-4 mb-12">
+                  <ul className="grid grid-cols-2 gap-4 mb-8 lg:mb-12">
                   {items.map(item => (
                       <li key={item.$id} className="flex items-center space-x-3 text-sm text-slate-300 group">
                       <img src={item.image_url} alt={item.name} className="w-10 h-10 rounded-lg object-cover border border-white/10 group-hover:border-amber-500 transition-colors" />
@@ -243,20 +244,20 @@ export const Hero = () => {
                   </div>
               )}
   
-              <Link to="/catalogo" className="inline-flex items-center space-x-4 bg-white/5 hover:bg-white/10 px-8 py-4 rounded-full border border-white/10 transition-colors group">
+              <Link to="/catalogo" className="w-full sm:w-auto inline-flex justify-center items-center space-x-4 bg-white/5 hover:bg-white/10 px-8 py-4 rounded-full border border-white/10 transition-colors group">
                 <span className="text-white font-bold uppercase tracking-widest text-xs">{t('furniture_section.cta')}</span>
                 <ArrowRight className="text-amber-500 w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </Link>
             </div>
   
 
-
-            <div className="lg:w-1/2 relative">
+  
+            <div className="w-full lg:w-1/2 relative mt-8 lg:mt-0">
               <div className="absolute inset-0 bg-amber-500/20 blur-[100px] rounded-full opacity-50"></div>
-              <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl group min-h-[600px] h-[600px]">
+              <div className="relative rounded-3xl lg:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl group w-full aspect-video lg:aspect-auto lg:h-[600px]">
                 <CinematicSlideshow />
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent pointer-events-none z-20">
-                  <div className="text-white font-black text-9xl opacity-10 absolute bottom-0 right-0 leading-none -mb-10 -mr-10">D</div>
+                  <div className="text-white font-black text-6xl lg:text-9xl opacity-10 absolute bottom-0 right-0 leading-none -mb-4 lg:-mb-10 lg:-mr-10">D</div>
                 </div>
               </div>
             </div>
@@ -271,7 +272,7 @@ export const Hero = () => {
   export const Home = () => {
     return (
         <>
-            <Hero />
+            <HeroSection />
             <LegalSection />
             <DivisionExplorer />
             <MobiliarioSection />
