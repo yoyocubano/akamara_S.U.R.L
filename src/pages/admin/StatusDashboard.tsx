@@ -215,7 +215,7 @@ export const StatusDashboard = () => {
                     </div>
                     <h3 className="text-slate-400 text-sm uppercase font-bold tracking-wider relative z-10">{t('admin_dashboard.database')}</h3>
                     <div className="mt-2 flex items-center gap-3 relative z-10">
-                        <div className={`w-3 h-3 rounded-full ${dbStatus === 'connected' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-red-500 animate-pulse'}`} />
+                        <div className={"w-3 h-3 rounded-full " + (dbStatus === 'connected' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-red-500 animate-pulse')} />
                         <span className="text-2xl font-black text-white uppercase tracking-tighter">
                             {dbStatus === 'connected' ? t('admin_dashboard.online') : t('admin_dashboard.error')}
                         </span>
