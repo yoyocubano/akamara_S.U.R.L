@@ -261,7 +261,7 @@ export const StatusDashboard = () => {
                                 </div>
                                 <div>
                                     <p className="text-sm font-bold text-white uppercase tracking-tight">
-                                        {log.user_email !== 'Anónimo' ? log.user_email : ("Visitante " + log.device_info)}
+                                        {log.user_email !== 'Anónimo' ? log.user_email : ('Visitante ' + (log.device_info ?? ''))}
                                     </p>
                                     <p className="text-xs text-slate-500">Acción: {log.page}</p>
                                 </div>
