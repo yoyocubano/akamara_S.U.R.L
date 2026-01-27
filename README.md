@@ -1,5 +1,6 @@
 # Akamara S.U.R.L. (Repositorio Oficial) ✅
-> **Estado:** Infraestructura Certificada por AntiGravity. Despliegue automático y Escribano activos en `www.akamara-surl.com`.
+> **Estado:** Infraestructura Certificada por AntiGravity. Despliegue automático y Escribano activos.
+> **Última Actualización:** 27 de Enero de 2026 - 12:10 CET
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
