@@ -1,4 +1,3 @@
-```
 import { useState, useEffect } from 'react';
 import { Activity, Database, Users, AlertTriangle, CheckCircle, Clock, Mail, BarChart3, ArrowUpRight, Globe, XCircle, Smartphone, Monitor } from 'lucide-react';
 import { databases, APPWRITE_CONFIG } from '../../lib/appwrite';
