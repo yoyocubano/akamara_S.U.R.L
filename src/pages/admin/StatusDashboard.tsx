@@ -13,10 +13,12 @@ export const StatusDashboard = () => {
         messageCount: 0
     });
 
+    const [recentLogs, setRecentLogs] = useState<any[]>([]);
+
     const checkHealth = async () => {
         let dbOk = false;
         try {
-            // 1. Check DB Connection (Novedades)
+            // 1. Check DB Connection
             await databases.listDocuments(
                 APPWRITE_CONFIG.DATABASE_ID, 
                 APPWRITE_CONFIG.COLLECTIONS.NOVEDADES, 
@@ -24,67 +26,61 @@ export const StatusDashboard = () => {
             );
             dbOk = true;
         } catch (error) {
-            console.warn("Health check (Novedades) failed:", error);
+            console.warn("Health check failed:", error);
         }
         setDbStatus(dbOk ? 'connected' : 'error');
 
-        try {
-            // 2. Fetch Live Visitors (Active in last 5 mins)
-            const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-            const liveDocs = await databases.listDocuments(
-                APPWRITE_CONFIG.DATABASE_ID,
-                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-                [Query.greaterThan('$createdAt', fiveMinsAgo)]
-            );
+        if (dbOk) {
+            try {
+                // 2. Fetch Stats & Real Logs
+                const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+                const liveDocs = await databases.listDocuments(
+                    APPWRITE_CONFIG.DATABASE_ID,
+                    APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
+                    [Query.greaterThan('$createdAt', fiveMinsAgo)]
+                );
 
-            // 3. Fetch Total Visits (Last 24h)
-            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-            const dayDocs = await databases.listDocuments(
-                APPWRITE_CONFIG.DATABASE_ID,
-                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-                [Query.greaterThan('$createdAt', twentyFourHoursAgo)]
-            );
+                const logs = await databases.listDocuments(
+                    APPWRITE_CONFIG.DATABASE_ID,
+                    APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
+                    [Query.orderDesc('$createdAt'), Query.limit(5)]
+                );
+                setRecentLogs(logs.documents);
 
-            // 4. Fetch Email/Form Interactions (Last 7 Days)
-            const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-            
-            // Emails
-            const emailDocs = await databases.listDocuments(
-                APPWRITE_CONFIG.DATABASE_ID,
-                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-                [
-                    Query.greaterThan('$createdAt', sevenDaysAgo),
-                    Query.equal('page', 'EVENT:email_click')
-                ]
-            );
+                const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+                const dayDocs = await databases.listDocuments(
+                    APPWRITE_CONFIG.DATABASE_ID,
+                    APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
+                    [Query.greaterThan('$createdAt', twentyFourHoursAgo)]
+                );
 
-            // Forms
-            const formDocs = await databases.listDocuments(
-                APPWRITE_CONFIG.DATABASE_ID,
-                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-                [
-                    Query.greaterThan('$createdAt', sevenDaysAgo),
-                    Query.equal('page', 'EVENT:form_submit')
-                ]
-            );
+                const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+                const interactions = await databases.listDocuments(
+                    APPWRITE_CONFIG.DATABASE_ID,
+                    APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
+                    [
+                        Query.greaterThan('$createdAt', sevenDaysAgo),
+                        Query.or([
+                            Query.equal('page', 'EVENT:form_submit'),
+                            Query.equal('page', 'EVENT:email_click')
+                        ])
+                    ]
+                );
 
-            setStats({
-                liveVisitors: liveDocs.total,
-                totalVisits24h: dayDocs.total,
-                messageCount: emailDocs.total + formDocs.total
-            });
-        } catch (error) {
-            console.error("Dashboard stats failed:", error);
+                setStats({
+                    liveVisitors: liveDocs.total,
+                    totalVisits24h: dayDocs.total,
+                    messageCount: interactions.total
+                });
+            } catch (error) {
+                console.error("Dashboard stats failed:", error);
+            }
         }
     };
 
     useEffect(() => {
-        const fetchInitialStatus = async () => {
-            await checkHealth();
-        };
-        fetchInitialStatus();
-        
-        const interval = setInterval(checkHealth, 30000); // Poll every 30s
+        checkHealth();
+        const interval = setInterval(checkHealth, 20000);
         return () => clearInterval(interval);
     }, []);
 
@@ -110,7 +106,7 @@ export const StatusDashboard = () => {
                         </span>
                     </div>
                     <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 animate-pulse w-1/3"></div>
+                        <div className="h-full bg-amber-500 animate-pulse w-1/3" style={{ width: stats.liveVisitors > 0 ? '100%' : '30%' }}></div>
                     </div>
                 </div>
 
@@ -165,7 +161,7 @@ export const StatusDashboard = () => {
                 </div>
             </div>
 
-            {/* Reciente log simplificado */}
+            {/* Reciente log real */}
             <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
@@ -175,20 +171,26 @@ export const StatusDashboard = () => {
                 </div>
 
                 <div className="space-y-4">
-                    {[1, 2, 3].map((item) => (
-                        <div key={item} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-white/10 transition-colors">
+                    {recentLogs.length > 0 ? recentLogs.map((log) => (
+                        <div key={log.$id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-white/10 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
                                     <Users className="w-5 h-5 text-amber-500" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-white uppercase tracking-tight">{t('admin_dashboard.visitors_now')}</p>
-                                    <p className="text-xs text-slate-500">ID: session_00{item}</p>
+                                    <p className="text-sm font-bold text-white uppercase tracking-tight">
+                                        {log.user_email !== 'Anónimo' ? log.user_email : `Visitante ${log.device_info}`}
+                                    </p>
+                                    <p className="text-xs text-slate-500">Acción: {log.page}</p>
                                 </div>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-500 uppercase">{t('admin_dashboard.just_now')}</span>
+                            <span className="text-[10px] font-bold text-slate-500 uppercase">
+                                {new Date(log.$createdAt).toLocaleTimeString()}
+                            </span>
                         </div>
-                    ))}
+                    )) : (
+                        <p className="text-slate-500 text-sm font-bold uppercase py-10 text-center">Esperando actividad...</p>
+                    )}
                 </div>
             </div>
             

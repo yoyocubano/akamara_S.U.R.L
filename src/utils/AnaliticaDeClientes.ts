@@ -1,32 +1,47 @@
 
 /**
- * 🕵️‍♂️ HERRAMIENTA: ANALÍTICA DE CLIENTES
+ * 🕵️‍♂️ HERRAMIENTA: ANALÍTICA DE CLIENTES (VERSIÓN PRO)
  * ---------------------------------------
  * Esta utilidad gestiona el rastreo de visitantes de forma anónima pero persistente.
- * Ideal para saber "quién" vuelve a visitar la página sin pedir login.
- * 
- * USO EN OTROS PROYECTOS:
- * 1. Copiar este archivo.
- * 2. Asegurar que existe la colección 'analytics_visits' en la base de datos.
- * 3. Importar y llamar a trackVisit() en el componente principal (App.tsx o Layout).
+ * Ahora incluye detección de dispositivo y vinculación de sesión.
  */
 
-import { databases, APPWRITE_CONFIG } from '../lib/appwrite';
+import { databases, APPWRITE_CONFIG, account } from '../lib/appwrite';
 import { ID } from 'appwrite';
 
 const STORAGE_KEY = 'client_analytics_id';
 
 export const AnaliticaDeClientes = {
     /**
+     * Detector de dispositivo ultra-ligero
+     */
+    getDeviceInfo: () => {
+        const ua = navigator.userAgent;
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Tablet";
+        if (/Mobile|android|iphone|ipod|blackberry|iemobile|kindle/i.test(ua)) return "Móvil";
+        return "Escritorio";
+    },
+
+    /**
+     * Obtiene el nombre del navegador simplificado
+     */
+    getBrowserName: () => {
+        const ua = navigator.userAgent;
+        if (ua.includes("Chrome")) return "Chrome";
+        if (ua.includes("Firefox")) return "Firefox";
+        if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+        if (ua.includes("Edge")) return "Edge";
+        return "Buscador";
+    },
+
+    /**
      * Obtiene o genera un ID único para el visitante actual.
-     * Persiste en localStorage.
      */
     getVisitorId: () => {
         try {
             let id = localStorage.getItem(STORAGE_KEY);
             if (!id) {
-                // Generar un ID aleatorio robusto
-                id = 'vis_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+                id = 'vis_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(4);
                 localStorage.setItem(STORAGE_KEY, id);
             }
             return id;
@@ -36,47 +51,33 @@ export const AnaliticaDeClientes = {
     },
 
     /**
-     * Registra una visita en la base de datos.
-     * @param path Ruta actual (ej: /contacto)
+     * Intenta obtener el email si el usuario está logueado
      */
-    trackVisit: async (path: string) => {
-        const visitorId = AnaliticaDeClientes.getVisitorId();
-        
-        // Datos del entorno
-        const payload = {
-            visitor_id: visitorId,
-            page: path,
-            screen_size: `${window.innerWidth}x${window.innerHeight}`,
-            user_agent: navigator.userAgent?.substring(0, 250) || 'unknown'
-        };
-
-        console.log('📊 Analítica de Clientes: Registrando visita...', payload.page);
-
+    getUserEmail: async () => {
         try {
-            await databases.createDocument(
-                APPWRITE_CONFIG.DATABASE_ID,
-                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
-                ID.unique(),
-                payload
-            );
-        } catch (error) {
-            // Fallo silencioso para no molestar al usuario
-            console.warn('⚠️ Error registrando analítica:', error);
+            const user = await account.get();
+            return user.email;
+        } catch {
+            return null;
         }
     },
 
     /**
-     * Registra un evento específico (clic, envío de formulario, etc.)
-     * @param eventName Nombre del evento (ej: EVENT:form_submit)
+     * Registra una visita o evento en la base de datos con identidad enriquecida.
      */
-    trackEvent: async (eventName: string) => {
+    trackAction: async (action: string, metadata: any = {}) => {
         const visitorId = AnaliticaDeClientes.getVisitorId();
+        const email = await AnaliticaDeClientes.getUserEmail();
+        const device = AnaliticaDeClientes.getDeviceInfo();
+        const browser = AnaliticaDeClientes.getBrowserName();
         
         const payload = {
             visitor_id: visitorId,
-            page: eventName, // Mapeado a la columna 'page' para consistencia con trackVisit
+            user_email: email || 'Anónimo',
+            page: action,
+            device_info: `${device} (${browser})`,
             screen_size: `${window.innerWidth}x${window.innerHeight}`,
-            user_agent: navigator.userAgent?.substring(0, 250) || 'unknown'
+            ...metadata
         };
 
         try {
@@ -87,7 +88,10 @@ export const AnaliticaDeClientes = {
                 payload
             );
         } catch (error) {
-            console.warn('⚠️ Error rastreando evento:', error);
+            console.warn('⚠️ Analítica Error:', error);
         }
-    }
+    },
+
+    trackVisit: (path: string) => AnaliticaDeClientes.trackAction(path),
+    trackEvent: (eventName: string) => AnaliticaDeClientes.trackAction(eventName)
 };
