@@ -1,4 +1,5 @@
-# React + TypeScript + Vite
+# Akamara S.U.R.L. (Repositorio Oficial) ✅
+> **Estado:** Infraestructura Certificada por AntiGravity. Despliegue automático y Escribano activos en `www.akamara-surl.com`.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
