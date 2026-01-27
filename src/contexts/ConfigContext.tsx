@@ -15,7 +15,7 @@ interface ConfigContextType {
 const defaultConfig: Config = {
     site_name: 'Akamara S.U.R.L.',
     maintenance_mode: false,
-    contact_email: 'contacto@akamara.cu',
+    contact_email: 'contacto@akamara-surl.com',
     phone_number: '+53 52849673',
 };
 

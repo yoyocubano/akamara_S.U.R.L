@@ -67,7 +67,7 @@ export const onRequestPost = async (context) => {
       },
       body: JSON.stringify({
         from: `Akamara Web <${MAIL_FROM}>`,
-        to: ['akamarasurl@gmail.com'],
+        to: ['contacto@akamara-surl.com'],
         reply_to: email,
         subject: `Nueva Propuesta: ${division} - ${name}`,
         html: `
