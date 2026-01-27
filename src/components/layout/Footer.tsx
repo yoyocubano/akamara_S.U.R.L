@@ -4,6 +4,7 @@ import { Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../contexts/ConfigContext';
 import { LEGAL_INFO } from '../../constants';
+import { AnaliticaDeClientes } from '../../utils/AnaliticaDeClientes';
 // Asegúrate de tener el logo importado o pasarlo como prop. 
 // Para portabilidad, importamos desde assets relativos
 import logo from '../../assets/logo.png';
@@ -19,7 +20,7 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center space-x-3 mb-6">
+            <Link to="/" className="flex items-center space-x-3 mb-6" onClick={() => AnaliticaDeClientes.trackEvent('EVENT:footer_logo_click')}>
               <img src={logo} alt="Akamara Logo" className="w-12 h-12 object-contain" />
               <span className="text-2xl font-black uppercase tracking-tighter">{config.site_title || 'Akamara S.U.R.L.'}</span>
             </Link>

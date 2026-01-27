@@ -4,6 +4,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { DIVISIONS } from '../../constants';
 import { ArrowLeft, Sparkles, Shield, Rocket, Users, Zap, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { SEO } from '../../components/SEO';
 
 const DIVISION_THEMES: Record<string, any> = {
     estrategia: {
@@ -63,6 +64,11 @@ export default function DivisionDetail() {
 
     return (
         <div className="min-h-screen bg-slate-950 text-white pt-32 pb-20 relative overflow-hidden">
+            <SEO 
+                title={fullTitle} 
+                description={vision} 
+                path={`/division/${id}`}
+            />
             {/* Visual background dedicated to the Orisha */}
             <div className={`absolute inset-0 z-0 opacity-10 blur-[120px] bg-gradient-to-tr ${theme.gradient}`}></div>
 

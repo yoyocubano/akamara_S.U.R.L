@@ -5,6 +5,24 @@
         "catalogo": "Catálogo",
         "contact": "Contacto"
     },
+    "seo": {
+        "home": {
+            "title": "Inicio",
+            "description": "Akamara S.U.R.L. - Ecosistema de servicios integrales en Cuba. Mobiliario de diseño, construcción y soluciones logísticas."
+        },
+        "catalog": {
+            "title": "Catálogo de Productos y Servicios",
+            "description": "Explore nuestra selección exclusiva de mobiliario premium, servicios de construcción y logística especializada en Cuba."
+        },
+        "contact": {
+            "title": "Contacto y Asesoría",
+            "description": "Póngase en contacto con los expertos de Akamara para su próximo proyecto en Cuba. Soporte personalizado en todas nuestras divisiones."
+        },
+        "legal": {
+            "title": "Expediente Legal y Privacidad",
+            "description": "Consulte la base legal, NIT y políticas de privacidad de Akamara S.U.R.L. Transparencia y solidez jurídica."
+        }
+    },
     "hero": {
         "title": "Akamara",
         "subtitle": "Antes del tiempo, Akamara",
@@ -230,5 +248,21 @@
             "title": "4. Propiedad Intelectual",
             "desc": "Todo el contenido de este sitio (logotipos, textos, diseños, código fuente) es propiedad exclusiva de <strong>AKAMARA S.U.R.L.</strong> o cuenta con las licencias de uso correspondientes. Queda prohibida su reproducción total o parcial sin autorización expresa por escrito."
         }
+    },
+    "admin_dashboard": {
+        "title": "Estado del Sistema",
+        "visitors_now": "Visitantes Ahora",
+        "total_visits_24h": "Visitas Totales",
+        "database": "Base de Datos",
+        "contacts": "Contactos",
+        "active_monitor": "Monitor de Tráfico Activado",
+        "db_sync": "Sincronización de Base de Datos",
+        "automatic": "Automático",
+        "online": "Online",
+        "error": "Error",
+        "last_7_days": "7 días",
+        "total": "Total",
+        "recent_activity": "Registro de Actividad Reciente",
+        "just_now": "Hace 1 min"
     }
 }

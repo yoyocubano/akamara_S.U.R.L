@@ -1,15 +1,20 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from "react-i18next";
+import { useSeo } from '../seo/useSeo';
+import { useParams, useLocation } from 'react-router-dom';
 
 interface SEOProps {
     title?: string;
     description?: string;
+    titleKey?: string;
+    descriptionKey?: string;
     image?: string;
     url?: string;
     type?: string;
     keywords?: string[] | string;
-    schema?: any; // Add support for JSON-LD schema
+    schema?: Record<string, any>; 
+    path?: string;
 }
 
 /**
@@ -19,18 +24,36 @@ interface SEOProps {
 export const SEO: React.FC<SEOProps> = ({
     title,
     description,
+    titleKey,
+    descriptionKey,
     image,
     url,
     type = 'website',
     keywords,
-    schema
+    schema,
+    path
 }) => {
     const { t, i18n } = useTranslation();
+    const params = useParams();
+    const location = useLocation();
+    
+    // HashRouter handling
+    const currentPath = path || location.pathname || '/';
+    
+    // Use registry if no explicit props are provided
+    const registrySeo = useSeo(currentPath, params as Record<string, string>);
+
     const siteTitle = 'Akamara S.U.R.L.';
-    const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
-    const metaDescription = description || t('hero.description') || 'Innovación y Tecnología en Cuba.';
-    const metaImage = image || 'https://akamara.cu/og-image-default.jpg'; // Placeholder url
-    const metaUrl = url || 'https://akamara.cu';
+    const baseUrl = 'https://akamara.surl.cu';
+    
+    const metaUrl = url || `${baseUrl}/#${currentPath}`;
+    
+    const displayTitle = titleKey ? t(titleKey) : (title || registrySeo?.title);
+    const fullTitle = displayTitle ? `${displayTitle} | ${siteTitle}` : siteTitle;
+    const metaDescription = (descriptionKey ? t(descriptionKey) : (description || registrySeo?.description)) 
+        || t('hero.description') 
+        || 'Innovación y Tecnología en Cuba.';
+    const metaImage = image || `${baseUrl}/android-chrome-512x512.png`;
     const currentLang = i18n.language || 'es';
 
     // Map i18next language to Open Graph locale format
@@ -52,7 +75,7 @@ export const SEO: React.FC<SEOProps> = ({
                 />
             )}
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <meta name="theme-color" content="#d97706" /> {/* Amber-600 approx */}
+            <meta name="theme-color" content="#020617" /> 
 
             {/* Open Graph / Facebook / WhatsApp */}
             <meta property="og:type" content={type} />
@@ -71,6 +94,11 @@ export const SEO: React.FC<SEOProps> = ({
 
             {/* Canonical */}
             <link rel="canonical" href={metaUrl} />
+
+            {/* Hreflang for international SEO */}
+            <link rel="alternate" href={`${baseUrl}/#/es${currentPath}`} hrefLang="es" />
+            <link rel="alternate" href={`${baseUrl}/#/en${currentPath}`} hrefLang="en" />
+            <link rel="alternate" href={metaUrl} hrefLang="x-default" />
 
             {/* JSON-LD Schema Rendering */}
             {schema && (

@@ -30,7 +30,7 @@ export const AnaliticaDeClientes = {
                 localStorage.setItem(STORAGE_KEY, id);
             }
             return id;
-        } catch (e) {
+        } catch {
             return 'anonymous_' + Date.now();
         }
     },
@@ -62,6 +62,32 @@ export const AnaliticaDeClientes = {
         } catch (error) {
             // Fallo silencioso para no molestar al usuario
             console.warn('⚠️ Error registrando analítica:', error);
+        }
+    },
+
+    /**
+     * Registra un evento específico (clic, envío de formulario, etc.)
+     * @param eventName Nombre del evento (ej: EVENT:form_submit)
+     */
+    trackEvent: async (eventName: string) => {
+        const visitorId = AnaliticaDeClientes.getVisitorId();
+        
+        const payload = {
+            visitor_id: visitorId,
+            page: eventName, // Mapeado a la columna 'page' para consistencia con trackVisit
+            screen_size: `${window.innerWidth}x${window.innerHeight}`,
+            user_agent: navigator.userAgent?.substring(0, 250) || 'unknown'
+        };
+
+        try {
+            await databases.createDocument(
+                APPWRITE_CONFIG.DATABASE_ID,
+                APPWRITE_CONFIG.COLLECTIONS.ANALYTICS,
+                ID.unique(),
+                payload
+            );
+        } catch (error) {
+            console.warn('⚠️ Error rastreando evento:', error);
         }
     }
 };

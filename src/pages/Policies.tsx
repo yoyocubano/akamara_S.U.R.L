@@ -5,6 +5,7 @@ import { Shield, Lock, FileText, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../contexts/ConfigContext';
 import { LEGAL_INFO } from '../constants';
+import { SEO } from '../components/SEO';
 
 export default function Policies() {
     const { config } = useConfig();
@@ -21,6 +22,7 @@ export default function Policies() {
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-amber-500 selection:text-slate-950 pt-32 pb-20">
+            <SEO titleKey="seo.legal.title" descriptionKey="seo.legal.description" path="/politicas" />
             <div className="max-w-4xl mx-auto px-6">
                 
                 <Link to="/" className="inline-flex items-center gap-2 text-amber-500 hover:text-amber-400 transition-colors mb-12 font-bold uppercase tracking-widest text-xs">

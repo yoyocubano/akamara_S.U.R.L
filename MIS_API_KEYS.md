@@ -1,8 +1,14 @@
 # 🔐 Credenciales y Secretos del Proyecto Akamara S.U.R.L
 
-Actualizado: 10 de Enero, 2026
+Actualizado: 26 de Enero, 2026
 
 ⚠️ **DOCUMENTO CONFIDENCIAL**: No compartir públicamente.
+
+## 📜 Escribano (Google Docs Bot)
+- **Project ID**: `akamara-escribano-2026`
+- **Service Account**: `escribano-bot@akamara-escribano-2026.iam.gserviceaccount.com`
+- **Key File**: `escribano_key.json` (Local only)
+- **Uso**: Escritura automática en bitácora de Google Docs.
 
 ## 📧 Resend (Email Service)
 

@@ -1,19 +1,17 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../contexts/ConfigContext';
 import logo from '../../assets/logo.png';
+import { prefetchRoute } from '../../utils/prefetchRoutes';
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { config } = useConfig();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
+  const timerRef = useRef<any>(null);
 
   const links = [
     { name: t('nav.hub'), path: '/' },
@@ -21,11 +19,6 @@ export const Navbar = () => {
     { name: t('nav.catalogo') || 'Catálogo', path: '/catalogo' },
     { name: t('nav.contact'), path: '/contact' },
   ];
-
-  // Close menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
@@ -64,6 +57,7 @@ export const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
+                onMouseEnter={() => prefetchRoute(link.path)}
                 className={`text-[10px] uppercase tracking-[0.25em] font-black transition-all duration-300 relative group overflow-hidden ${location.pathname === link.path ? 'text-amber-500' : 'text-slate-400 hover:text-white'
                   }`}
               >
@@ -73,36 +67,10 @@ export const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex md:hidden items-center">
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className="text-white hover:text-amber-500 transition-colors p-2"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          {/* Mobile menu toggle removed in favor of BottomNav */}
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <div className={`md:hidden fixed inset-x-0 top-20 bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-300 ease-in-out transform origin-top ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'} h-screen`}>
-        <div className="p-6 space-y-6 flex flex-col items-center pt-12">
-          {links.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsOpen(false)}
-              className="block text-slate-300 text-xl font-black uppercase tracking-widest py-3 hover:text-amber-500 transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-8 border-t border-white/5 w-full flex justify-center">
-             <span className="text-slate-600 text-xs uppercase tracking-widest">Akamara S.U.R.L.</span>
-          </div>
-        </div>
-      </div>
     </nav>
   );
 };

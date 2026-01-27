@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Home Page -->
   <url>
-    <loc>https://akamara-surl.pages.dev/</loc>
-    <lastmod>2026-01-09</lastmod>
+    <loc>https://akamara.surl.cu/#/</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://akamara.surl.cu/#/es/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://akamara.surl.cu/#/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://akamara.surl.cu/#/"/>
   </url>
+
+  <!-- Catalog -->
   <url>
-    <loc>https://akamara-surl.pages.dev/#/servicios</loc>
-    <lastmod>2026-01-09</lastmod>
+    <loc>https://akamara.surl.cu/#/catalogo</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://akamara.surl.cu/#/es/catalogo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://akamara.surl.cu/#/en/catalogo"/>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://akamara.surl.cu/#/contact</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://akamara.surl.cu/#/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://akamara.surl.cu/#/en/contact"/>
   </url>
+
+  <!-- Legal -->
   <url>
-    <loc>https://akamara-surl.pages.dev/#/mobiliario</loc>
-    <lastmod>2026-01-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://akamara-surl.pages.dev/#/contact</loc>
-    <lastmod>2026-01-09</lastmod>
+    <loc>https://akamara.surl.cu/#/legal</loc>
+    <lastmod>2026-01-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://akamara-surl.pages.dev/#/politicas</loc>
-    <lastmod>2026-01-09</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://akamara.surl.cu/#/es/legal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://akamara.surl.cu/#/en/legal"/>
   </url>
 </urlset>

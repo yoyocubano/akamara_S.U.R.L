@@ -4,6 +4,8 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../contexts/ConfigContext';
 import { LEGAL_INFO } from '../../constants';
+import { AnaliticaDeClientes } from '../../utils/AnaliticaDeClientes';
+import { SEO } from '../../components/SEO';
 
 export const Contact = () => {
   const { config } = useConfig();
@@ -28,11 +30,15 @@ export const Contact = () => {
             throw new Error(data.error || 'Error enviando formulario');
         }
 
+        // Rastrear evento de éxito
+        AnaliticaDeClientes.trackEvent('EVENT:form_submit');
+
         alert('Gracias. Hemos recibido tu mensaje correctamente.');
         setFormData({ name: '', company: '', division: 'Estrategia', message: '', email: '' });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
         console.error('Submission Error:', error);
-        alert(`Hubo un error al enviar: ${error.message}. Por favor intenta contactar directamente por email.`);
+        alert(`Hubo un error al enviar: ${errorMessage}. Por favor intenta contactar directamente por email.`);
     } finally {
         setSending(false);
     }
@@ -40,6 +46,7 @@ export const Contact = () => {
 
   return (
     <div className="pt-40 pb-24 bg-void min-h-screen">
+      <SEO titleKey="seo.contact.title" descriptionKey="seo.contact.description" path="/contact" />
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-slate-900 border border-white/10 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row">
           <div className="bg-slate-950 p-12 text-white md:w-2/5 relative overflow-hidden">

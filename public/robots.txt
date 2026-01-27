@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /login
 
-Sitemap: https://akamara-surl.pages.dev/sitemap.xml
+Sitemap: https://akamara.surl.cu/sitemap.xml

@@ -5,6 +5,24 @@
         "catalogo": "Catalog",
         "contact": "Contact"
     },
+    "seo": {
+        "home": {
+            "title": "Home",
+            "description": "Akamara S.U.R.L. - Comprehensive service ecosystem in Cuba. Designer furniture, construction, and logistical solutions."
+        },
+        "catalog": {
+            "title": "Product & Service Catalog",
+            "description": "Explore our exclusive selection of premium furniture, construction services, and specialized logistics in Cuba."
+        },
+        "contact": {
+            "title": "Contact & Advice",
+            "description": "Get in touch with Akamara experts for your next project in Cuba. Personal support across all our divisions."
+        },
+        "legal": {
+            "title": "Legal Documents & Privacy",
+            "description": "Check Akamara S.U.R.L.'s legal basis, NIT, and privacy policies. Transparency and legal solidity."
+        }
+    },
     "hero": {
         "title": "Akamara",
         "subtitle": "Before time, Akamara",
@@ -230,5 +248,21 @@
             "title": "4. Intellectual Property",
             "desc": "All content on this site (logos, texts, designs, source code) is the exclusive property of <strong>AKAMARA S.U.R.L.</strong> or has the corresponding use licenses. Total or partial reproduction regarding this content is prohibited without express written authorization."
         }
+    },
+    "admin_dashboard": {
+        "title": "System Status",
+        "visitors_now": "Visitors Now",
+        "total_visits_24h": "Total Visits",
+        "database": "Database",
+        "contacts": "Contacts",
+        "active_monitor": "Traffic Monitor Active",
+        "db_sync": "Database Synchronization",
+        "automatic": "Automatic",
+        "online": "Online",
+        "error": "Error",
+        "last_7_days": "7 days",
+        "total": "Total",
+        "recent_activity": "Recent Activity Log",
+        "just_now": "1 min ago"
     }
 }

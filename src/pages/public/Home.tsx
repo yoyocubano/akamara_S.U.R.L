@@ -1,13 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../contexts/ConfigContext';
 import { DIVISIONS } from '../../constants';
-import { databases, APPWRITE_CONFIG } from '../../lib/appwrite';
+import { databases, storage, APPWRITE_CONFIG } from '../../lib/appwrite';
 import { Query } from 'appwrite';
 import { LegalSection } from './Legal';
 import { HeroSection } from '../../components/ui/HeroSection';
+import { SkeletonCard } from '../../components/ui/Skeleton';
+import { SEO } from '../../components/SEO';
 
 
 // --- SUB-COMPONENTS ---
@@ -28,13 +30,13 @@ const CinematicSlideshow = () => {
             try {
                 const response = await storage.listFiles(APPWRITE_CONFIG.BUCKETS.IMAGES);
                 if (response.total > 0) {
-                    const dynamicSlides = response.files.map(file => 
-                        storage.getFileView(APPWRITE_CONFIG.BUCKETS.IMAGES, file.$id).href
-                    );
+                    const dynamicSlides = response.files.map((file: any) => {
+                        return storage.getFileView(APPWRITE_CONFIG.BUCKETS.IMAGES, file.$id).toString();
+                    });
                     setSlides(dynamicSlides);
                 }
-            } catch (e) {
-                console.warn("Could not load dynamic slides, using defaults.");
+            } catch (error) {
+                console.warn("Could not load dynamic slides, using defaults.", error);
             }
         };
         fetchSlides();
@@ -188,7 +190,7 @@ export const Hero = () => {
     );
   };
   
-  export const MobiliarioSection = () => {
+export const MobiliarioSection = () => {
     const { t } = useTranslation();
     const [items, setItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -226,21 +228,27 @@ export const Hero = () => {
                 {t('furniture_section.desc')}
               </p>
   
-              {items.length > 0 ? (
+              {loading ? (
+                  <div className="grid grid-cols-2 gap-4 mb-8 lg:mb-12">
+                    {[1, 2, 3, 4].map(i => (
+                      <SkeletonCard key={i} />
+                    ))}
+                  </div>
+              ) : items.length > 0 ? (
                   <ul className="grid grid-cols-2 gap-4 mb-8 lg:mb-12">
-                  {items.map(item => (
-                      <li key={item.$id} className="flex items-center space-x-3 text-sm text-slate-300 group">
-                      <img src={item.image_url} alt={item.name} className="w-10 h-10 rounded-lg object-cover border border-white/10 group-hover:border-amber-500 transition-colors" />
-                      <div>
-                          <span className="uppercase tracking-wider font-bold text-[10px] block text-white">{item.name}</span>
-                          <span className="text-[9px] text-amber-500">{item.category}</span>
-                      </div>
-                      </li>
-                  ))}
+                    {items.map(item => (
+                        <li key={item.$id} className="flex items-center space-x-3 text-sm text-slate-300 group">
+                          <img src={item.image_url} alt={item.name} className="w-10 h-10 rounded-lg object-cover border border-white/10 group-hover:border-amber-500 transition-colors" />
+                          <div>
+                              <span className="uppercase tracking-wider font-bold text-[10px] block text-white">{item.name}</span>
+                              <span className="text-[9px] text-amber-500">{item.category}</span>
+                          </div>
+                        </li>
+                    ))}
                   </ul>
               ) : (
                   <div className="mb-12 p-4 bg-white/5 rounded-xl border border-white/5 text-xs text-slate-500 italic">
-                      {loading ? 'Cargando catálogo...' : 'Catálogo actualizándose...'}
+                      {t('common.no_data', 'Catálogo actualizándose...')}
                   </div>
               )}
   
@@ -272,6 +280,7 @@ export const Hero = () => {
   export const Home = () => {
     return (
         <>
+            <SEO titleKey="seo.home.title" descriptionKey="seo.home.description" path="/" />
             <HeroSection />
             <LegalSection />
             <DivisionExplorer />

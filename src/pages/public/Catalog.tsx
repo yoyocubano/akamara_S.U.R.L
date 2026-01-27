@@ -2,10 +2,11 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Download, ShoppingCart, MessageSquare, ArrowLeft, Filter, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { CATALOG_DATA, CatalogItem } from '../../data/catalog';
+import { CATALOG_DATA, type CatalogItem } from '../../data/catalog';
 import { LEGAL_INFO } from '../../constants';
 import jsPDF from 'jspdf';
 import { storage, APPWRITE_CONFIG } from '../../lib/appwrite';
+import { SEO } from '../../components/SEO';
 
 export const Catalog = () => {
   const { t, i18n } = useTranslation();
@@ -70,7 +71,7 @@ export const Catalog = () => {
       try {
           const files = await storage.listFiles(APPWRITE_CONFIG.BUCKETS.IMAGES);
           if (files.total > 0) {
-              slideUrls = files.files.map(f => storage.getFileView(APPWRITE_CONFIG.BUCKETS.IMAGES, f.$id).href);
+              slideUrls = files.files.map(f => storage.getFileView(APPWRITE_CONFIG.BUCKETS.IMAGES, f.$id).toString());
           }
       } catch(e) { console.warn('Using default PDF slides'); }
 
@@ -426,6 +427,7 @@ export const Catalog = () => {
 
   return (
     <div className="pt-32 pb-24 bg-void min-h-screen text-white">
+      <SEO titleKey="seo.catalog.title" descriptionKey="seo.catalog.description" path="/catalogo" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
