@@ -63,7 +63,7 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('contact_section.labels.call')}</p>
-                  <p className="text-white font-bold">{config.contact_phone}</p>
+                  <p className="text-white font-bold">{config.phone_number}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = `mailto:${config.contact_email}`}>
@@ -99,9 +99,15 @@ export const Contact = () => {
                   <input value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} type="text" className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all" />
                 </div>
               </div>
-              <div>
-                  <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">Email</label>
-                  <input required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} type="email" className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all" />
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                    <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">Email</label>
+                    <input required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} type="email" className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all" />
+                </div>
+                <div>
+                    <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">Teléfono</label>
+                    <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} type="tel" className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none transition-all" />
+                </div>
               </div>
               <div>
                 <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 mb-2 block">{t('contact_section.labels.division')}</label>
