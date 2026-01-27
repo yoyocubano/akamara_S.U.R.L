@@ -8,7 +8,7 @@ export const onRequestPost = async (context) => {
     // --- CONFIGURATION ---
     // Use Akamara-specific variables first, fallback to standard ones
     const APPWRITE_ENDPOINT = env.AKAMARA_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1';
-    const APPWRITE_PROJECT = env.AKAMARA_APPWRITE_PROJECT_ID || 'fra-696075130002ba18c0ac';
+    const APPWRITE_PROJECT = env.AKAMARA_APPWRITE_PROJECT_ID || '696075130002ba18c0ac';
     const APPWRITE_KEY = env.AKAMARA_APPWRITE_SERVER_KEY || env.APPWRITE_API_KEY; // The long secret key
     const APPWRITE_DB = 'main';
     const APPWRITE_COLLECTION = 'petitions';
@@ -52,6 +52,8 @@ export const onRequestPost = async (context) => {
         if (!dbResponse.ok) {
             const errorText = await dbResponse.text();
             console.error('Appwrite Error:', errorText);
+            // Append explicit warning to be returned later if needed, or just log high priority
+            body._dbError = errorText; 
         }
 
     } catch (dbError) {
@@ -97,7 +99,11 @@ export const onRequestPost = async (context) => {
         throw new Error(emailData.message || 'Error enviando email');
     }
 
-    return new Response(JSON.stringify({ success: true, id: emailData.id }), {
+    return new Response(JSON.stringify({ 
+        success: true, 
+        id: emailData.id,
+        db_warning: body._dbError || null 
+    }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
     });

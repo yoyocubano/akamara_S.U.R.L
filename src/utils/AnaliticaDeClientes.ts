@@ -13,13 +13,21 @@ const STORAGE_KEY = 'client_analytics_id';
 
 export const AnaliticaDeClientes = {
     /**
-     * Detector de dispositivo ultra-ligero
+     * Detector de dispositivo ultra-ligero y País (estimado)
      */
     getDeviceInfo: () => {
         const ua = navigator.userAgent;
         if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Tablet";
         if (/Mobile|android|iphone|ipod|blackberry|iemobile|kindle/i.test(ua)) return "Móvil";
         return "Escritorio";
+    },
+
+    getCountry: () => {
+        try {
+            return Intl.DateTimeFormat().resolvedOptions().timeZone.split('/')[0] || 'Desconocido';
+        } catch {
+            return 'Desconocido';
+        }
     },
 
     /**
@@ -70,6 +78,7 @@ export const AnaliticaDeClientes = {
         const email = await AnaliticaDeClientes.getUserEmail();
         const device = AnaliticaDeClientes.getDeviceInfo();
         const browser = AnaliticaDeClientes.getBrowserName();
+        const country = AnaliticaDeClientes.getCountry();
         
         const payload = {
             visitor_id: visitorId,
@@ -77,6 +86,7 @@ export const AnaliticaDeClientes = {
             page: action,
             device_info: `${device} (${browser})`,
             screen_size: `${window.innerWidth}x${window.innerHeight}`,
+            country: country,
             ...metadata
         };
 
