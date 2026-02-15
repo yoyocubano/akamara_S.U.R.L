@@ -17,7 +17,7 @@ export default function OriChatBot() {
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || "sk-ee8de57e3144456aa0b13285ada8c0eb";
+
 
     // Dynamic Identity Logic
     const YUNIOR_END_DATE = new Date("2026-01-16T23:59:59");
@@ -95,19 +95,19 @@ export default function OriChatBot() {
 
     const [dynamicPrompt, setDynamicPrompt] = useState("");
     const DAILY_LIMIT = 20; // Message limit per user/day
-    
+
     // Check Limits
     const checkLimit = () => {
         const today = new Date().toDateString();
         const usage = JSON.parse(localStorage.getItem('akamara_chat_usage') || '{}');
-        
+
         if (usage.date !== today) {
             usage.date = today;
             usage.count = 0;
         }
-        
+
         if (usage.count >= DAILY_LIMIT) return false;
-        
+
         usage.count++;
         localStorage.setItem('akamara_chat_usage', JSON.stringify(usage));
         return true;
@@ -123,9 +123,9 @@ export default function OriChatBot() {
                     APPWRITE_CONFIG.COLLECTIONS.SETTINGS,
                     [Query.equal('key', 'chatbot_system_prompt')]
                 );
-                
+
                 if (docs.total > 0) {
-                   setDynamicPrompt(docs.documents[0].value);
+                    setDynamicPrompt(docs.documents[0].value);
                 }
             } catch (err) {
                 console.warn("Using default system prompt");
@@ -134,42 +134,25 @@ export default function OriChatBot() {
         fetchPrompt();
     }, []);
 
-    const fetchDeepSeekResponse = async (chatMessages: Message[]) => {
+    const fetchAIResponse = async (chatMessages: Message[]) => {
         if (!checkLimit()) {
-            return isYuniorMode 
-                ? "Asere, ya hablamos demasiado por hoy. La cuenta no da pa' más. Mañana seguimos." 
+            return isYuniorMode
+                ? "Asere, ya hablamos demasiado por hoy. La cuenta no da pa' más. Mañana seguimos."
                 : "He alcanzado mi límite diario de mensajes. Por favor, contáctenos vía WhatsApp o intente mañana.";
         }
 
-        const activeSystemPrompt = dynamicPrompt || botIdentity.systemPrompt;
-
-        const fullPrompt = [
-            {
-                role: "system",
-                content: `${activeSystemPrompt}\n\nCONTEXTO ACTUAL:\n- Fecha: ${now.toLocaleDateString('es-ES')}\n- Hora Local: ${now.toLocaleTimeString('es-ES')}\n- Ubicación: La Habana, Cuba.\n\nIMPORTANTE: No alucines con la fecha ni la hora, usa los datos proporcionados arriba. Saluda adecuadamente según el contexto horario si es necesario.`
-            },
-            ...chatMessages.map(m => ({ role: m.role, content: m.content }))
-        ];
-
         try {
-            const response = await fetch("https://api.deepseek.com/chat/completions", {
+            const response = await fetch("/api/chat", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: "deepseek-chat",
-                    messages: fullPrompt,
-                    stream: false
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages: chatMessages.map(m => ({ role: m.role, content: m.content })) })
             });
 
-            if (!response.ok) throw new Error("Error en la API de DeepSeek");
+            if (!response.ok) throw new Error("Error en el servidor de chat");
             const data = await response.json();
-            return data.choices[0].message.content;
+            return data.content;
         } catch (error) {
-            console.error("DeepSeek Error:", error);
+            console.error("Chat Error:", error);
             return isYuniorMode
                 ? "Asere, la tecnología me tiró un pie de amigo. Aguántame ahí un momento o escríbenos al WhatsApp."
                 : "Lo siento, estoy experimentando una interrupción técnica. Por favor, inténtelo de nuevo en unos momentos o contáctenos vía WhatsApp.";
@@ -191,7 +174,7 @@ export default function OriChatBot() {
         setInputValue("");
         setIsLoading(true);
 
-        const aiResponse = await fetchDeepSeekResponse(updatedMessages);
+        const aiResponse = await fetchAIResponse(updatedMessages);
 
         setMessages((prev) => [...prev, {
             role: "assistant",
